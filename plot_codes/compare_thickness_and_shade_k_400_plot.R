@@ -22,10 +22,10 @@ riveronly_400_2.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_400m_d
 riveronly_400_3.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_400m_day/riveronly/soil_3.0m/soil_3.0m_dailymeans.RData")
 
 
-structure_0.5 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_400m_day/shady/soil_0.5m/soil_0.5m_modelstructure.RData")
-structure_1.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_400m_day/shady/soil_1.0m/soil_1.0m_modelstructure.RData")
-structure_2.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_400m_day/shady/soil_2.0m/soil_2.0m_modelstructure.RData")
-structure_3.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_400m_day/shady/soil_3.0m/soil_3.0m_modelstructure.RData")
+structure_0.5 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_400m_day/riveronly/soil_0.5m/soil_0.5m_modelstructure.RData")
+structure_1.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_400m_day/riveronly/soil_1.0m/soil_1.0m_modelstructure.RData")
+structure_2.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_400m_day/riveronly/soil_2.0m/soil_2.0m_modelstructure.RData")
+structure_3.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_400m_day/riveronly/soil_3.0m/soil_3.0m_modelstructure.RData")
 
 structureList <- list(structure_0.5, structure_1.0, structure_2.0, structure_3.0)
 tempList_shady <- list(shady_400_0.5, shady_400_1.0, shady_400_2.0, shady_400_3.0)
@@ -42,7 +42,7 @@ plotcols <- hcl.colors(5, "Oranges", rev = F)
 plotcols <- plotcols[1:4] # when rev = F
 plotlwd <- 3
 time_idx <- c(2,8,14,20)
-x_idx <- 1:496
+x_idx <- 1:946
 
 originalpar <- par()
 #par(mfcol = c(1,1), oma = c(0,0,0,0), mar = c(5,4,4,1)+0.1)
