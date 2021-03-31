@@ -1,10 +1,10 @@
 ##
-## Make Plots for commitee meeting 
+## Compare sunny and shady HZ temperatures 
 ##
 
 
 library(devtools)
-install_github("FluvialLandscapeLab/HGSReader")
+#install_github("FluvialLandscapeLab/HGSReader")
 library(HGSReader)
 library(lubridate)
 
@@ -66,7 +66,6 @@ text(10, 21,
 
 
 ## Temperature differences across all flow paths ##
-staggerMo <- c()
 tempdiffsplot <- function(sunnyModel, shadyModel, k, depth2HZ, ...){
   if(k == "100"){
     structure2use <- model_100_1.0_xvals
