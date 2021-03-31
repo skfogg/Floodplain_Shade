@@ -66,6 +66,7 @@ text(10, 21,
 
 
 ## Temperature differences across all flow paths ##
+staggerMo <- c()
 tempdiffsplot <- function(sunnyModel, shadyModel, k, depth2HZ, ...){
   if(k == "100"){
     structure2use <- model_100_1.0_xvals
@@ -87,16 +88,17 @@ tempdiffsplot <- function(sunnyModel, shadyModel, k, depth2HZ, ...){
                                 ...),
            seq(1,24,5),
            hcl.colors(5))
-    mapply(function(t, c) text(structure2use[textAtX], 
+    mapply(function(t, c, xadj) text(structure2use[textAtX] + xadj, 
                                (mean(sunnyModel[aquifer_z_idx,textAtX,t]) - mean(shadyModel[aquifer_z_idx,textAtX,t])), 
                                months(days[t], abbreviate = T),
                                col = c,
                                pos = 3,
-                               cex = 1.3),
+                               cex = 2),
            seq(1,24,5),
-           hcl.colors(5))
+           hcl.colors(5),
+           c(0, -150, 0, -150, 0))
   
-text(-30,2.6, paste0("K = ", k,"m/day, depth2HZ = ", depth2HZ, "m"), pos = 4, cex = 1.5)
+text(-30,2.6, paste0("K = ", k,"m/day, depth2HZ = ", depth2HZ, "m"), pos = 4, cex = 2)
 }
 
 savetempdiffplots <- function(k = "100", d2hz = "0.5", sunnymodel, shadymodel, ...){
@@ -104,9 +106,10 @@ savetempdiffplots <- function(k = "100", d2hz = "0.5", sunnymodel, shadymodel, .
   png(paste0(getwd(),"/plots/sunnyTempIncrease_k", k, "_", d2hz, ".png"),
       height = 600,
       width = 800)
-  par(cex.lab = 1.5,
-      cex.main = 1.5,
-      cex.axis = 1.2)
+  par(cex.lab = 1.8,
+      cex.main = 2,
+      cex.axis = 1.5,
+      mar = c(5,5,5,1))
   tempdiffsplot(sunnymodel, shadymodel, k, d2hz, ...)
   dev.off()
 }
@@ -123,8 +126,9 @@ mapply(savetempdiffplots,
        modelNames2,
        listofSunny,
        listofShady,
-       MoreArgs = list(lwd = 2))
+       MoreArgs = list(lwd = 3))
 
+################
 ## Sando boxo ##
 savetempdiffplots("100", "0.5", sunny_100_0.5, shady_100_0.5, lwd = 2)
 
@@ -136,6 +140,25 @@ tempdiffsplot(sunny_400_0.5, shady_400_0.5, "400", "0.5")
 tempdiffsplot(sunny_400_1.0, shady_400_1.0, "400", "1.0")
 tempdiffsplot(sunny_400_2.0, shady_400_2.0, "400", "2.0")
 tempdiffsplot(sunny_400_3.0, shady_400_3.0, "400", "3.0")
+plot(colMeans(shady_400_3.0[aquifer_z_idx,1,]), type = "l")
+lines(colMeans(sunny_400_3.0[aquifer_z_idx,1,]), col = "orange")
+
+colMeans(sunny_400_3.0[aquifer_z_idx,1,]) - colMeans(shady_400_3.0[aquifer_z_idx,1,])
+
+
+shady_400_3.0_sat <- readRDS("C:/Users/skati/Box/Floodplain_Shade_Box/K_400m_day/shady/soil_3.0m/soil_3.0m_saturation_T1.RData")
+sunny_400_3.0_sat <- readRDS("C:/Users/skati/Box/Floodplain_Shade_Box/K_400m_day/sunny/soil_3.0m/soil_3.0m_saturation_T1.RData")
+
+dim(sunny_400_3.0_sat)
+xid <- 4
+plot(shady_400_3.0_str[xid,2,,"Z"] ~ shady_400_3.0_sat[xid,2,,1,"Sat"], pch = 19)
+points(sunny_400_3.0_str[xid,2,,"Z"] ~ sunny_400_3.0_sat[xid,2,,1,"Sat"], pch = 1,
+      col = "orange", type = "o")
+
+shady_400_3.0_sat[xid,2,,1,"Sat"] - sunny_400_3.0_sat[xid,2,,1,"Sat"]
+
+
+
 
 
 
