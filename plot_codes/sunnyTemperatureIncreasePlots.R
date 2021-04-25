@@ -36,6 +36,7 @@ days <- ymd_hms("2021-01-01 00:00:00") + (outtimes$V1[seq(1,by = 23, length.out 
 
 dim(shady_100_1.0)
 dim(shady_100_1.0_str)
+dim(shady_400_0.5_str)
 
 model_100_1.0_xvals <- shady_100_1.0_str[,2,1,"X"]
 model_400_1.0_xvals <- shady_400_1.0_str[,2,1,"X"]

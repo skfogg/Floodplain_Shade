@@ -70,7 +70,7 @@ processAndSave2 <- function(folderpath, modelname, doKriging = TRUE){
   saveRDS(gmeans, 
           file = paste0(folderpath, modelname, "_dailymeans.RData"))
   saveRDS(sat, 
-          file = paste0(folderpath, modelname, "_saturation_T1.RData"))
+          file = paste0(folderpath, modelname, "_saturation.RData"))
   saveRDS(modelstructure, 
           file = paste0(folderpath, modelname, "_modelstructure.RData"))
   saveRDS(allnodecentered, 
