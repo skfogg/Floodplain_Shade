@@ -19,7 +19,7 @@ calcDailyMean <- function(cube){
     
     for(z in 1:length(zs)){
       for(x in 1:length(xs)){
-        xmeans[x] <- mean(cube[x,2,seq(length(zs), 1, by = -1)[z],s:e,"temp"])
+        xmeans[x] <- mean(cube[x,2,seq(length(zs), 1, by = -1)[z],s:e,"temp"], na.rm = TRUE)
       }
       poop[z,,t] <- xmeans
     }
