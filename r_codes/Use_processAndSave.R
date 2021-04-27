@@ -2,7 +2,8 @@
 ## Process temperatureTester.o.pm.dat
 ##
 
-source('C:/Users/t24x137/Desktop/Floodplain_Shade/r_codes/functions/processAndSave.R')
+#source('C:/Users/t24x137/Desktop/Floodplain_Shade/r_codes/functions/processAndSave.R')
+source('/r_codes/functions/proces')
 
 processAndSave("soil_3.0m", "riveronly", "400", 
                folder = "C:/Users/t24x137/Box/Floodplain_Shade_Box")
