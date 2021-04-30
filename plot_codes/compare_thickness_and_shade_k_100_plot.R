@@ -41,7 +41,7 @@ plotcols <- hcl.colors(5, "Oranges", rev = F)
 plotcols <- plotcols[1:4] # when rev = F
 plotlwd <- 3
 time_idx <- c(2,8,14,20)
-x_idx <- 1:496
+x_idx <- 1:490
 
 originalpar <- par()
   #par(mfcol = c(1,1), oma = c(0,0,0,0), mar = c(5,4,4,1)+0.1)
@@ -61,7 +61,8 @@ plotacrosstime <- function(x, temp, modelrun) {
        lwd = plotlwd,
        ylab = expression(paste("Temperature (", degree, "C)")),
        xlab = "Flow Path Length (m)",
-       main = modelrun)
+       main = modelrun,
+       xlim = c(0,2000))
   mapply(function(t,c) lines(x[x_idx,2,30,"X"], colMeans(temp[aquifer_z_idx,x_idx,t]), col = c, lwd = plotlwd),
          time_idx,
          hcl.colors(12,"Fall"))
@@ -80,7 +81,7 @@ plotacrosstime <- function(x, temp, modelrun) {
 #     cex.axis = 1.5)
 
 
-png("plots/compare_thickness_and_shade_k_100_w_riveronly_try2.png",
+png("plots/compare_thickness_and_shade_k_100_w_riveronly_x2000.png",
     height = 1000*5,
     width = 900*5,
     res = 72*5)

@@ -4,7 +4,7 @@
 
 source("~/Floodplain_Shade/r_codes/functions/processAndSave3.R")
 
-box_directory <- "C:/Users/skati/Box/Floodplain_Shade_Box/"
+box_directory <- "C:/Users/t24x137/Box/Floodplain_Shade_Box/"
 
 kvals <- rep(c("100", "400"), each = 12)
 bcvals <- rep(rep(c("riveronly", "sunny", "shady"), each = 4), times = 2)
@@ -25,7 +25,7 @@ eachmodel[i] <- paste0("k", kvals[i], "_", soilvals[i], "_", bcvals[i])
 #        folderpath = eachfolder,
 #        modelname = eachmodel)
  library(HGSReader)
- source("C:/Users/skati/Documents/Floodplain_Shade/r_codes/functions/calcDailyMean.R")
+ source("C:/Users/t24x137/Desktop/Floodplain_Shade/r_codes/functions/calcDailyMean.R")
  # library(sp)
  # library(raster)
  # library(rgeos)
@@ -35,9 +35,7 @@ eachmodel[i] <- paste0("k", kvals[i], "_", soilvals[i], "_", bcvals[i])
 
 
 ## inside process and save:
-for(i in 4:24){
-        
-        i = 11
+for(i in c(1,2,8,9,11)){
         
 folderpath <- eachfolder[i]
 modelname <- eachmodel[i]
@@ -81,6 +79,8 @@ velocity <- HGSGetData(f, variables = c("Vx", "Vy", "Vz"), blockNumbers = c(1))
 saveRDS(velocity, 
         file = paste0(folderpath, "/", modelname, "_velocity.RData"))
 rm(velocity)
+
+rm(f)
 }
 
 
