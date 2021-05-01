@@ -68,7 +68,6 @@ aquifer_z_idx <- 17:47
 
 kNames2 <- rep(c("100", "400"), each = 4)
 modelNames <- rep(c("0.5", "1.0", "2.0", "3.0"), times = 6)
-
 modelNames2 <- modelNames[1:8]
 listofSunny <- list(k100_0.5_sunny, k100_1.0_sunny, k100_2.0_sunny, k100_3.0_sunny,
                     k400_0.5_sunny, k400_1.0_sunny, k400_2.0_sunny, k400_3.0_sunny)

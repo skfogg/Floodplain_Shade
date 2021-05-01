@@ -81,14 +81,27 @@ for(i in 1:length(fpInterest)){
 }
 
 
+##########***************************************###################
+##########***************************************###################
+
+kNames2 <- rep(c("100", "400"), each = 4)
+modelNames <- rep(c("0.5", "1.0", "2.0", "3.0"), times = 6)
+modelNames2 <- modelNames[1:8]
+listofSunny <- list(k100_0.5_sunny, k100_1.0_sunny, k100_2.0_sunny, k100_3.0_sunny,
+                    k400_0.5_sunny, k400_1.0_sunny, k400_2.0_sunny, k400_3.0_sunny)
+listofShady <- list(k100_0.5_shady, k100_1.0_shady, k100_2.0_shady, k100_3.0_shady,
+                    k400_0.5_shady, k400_1.0_shady, k400_2.0_shady, k400_3.0_shady)
+
+
+
 ## Temperature differences across all flow paths ##
 tempdiffsplot <- function(sunnyModel, shadyModel, k, depth2HZ, yl = c(0,2.65), colorpal = hcl.colors(5), ...){
   if(k == "100"){
     structure2use <- model_100_1.0_xvals
-    textAtX <- 350
+    textAtX <- 380
   }else{
     structure2use <- model_400_1.0_xvals
-    textAtX <- 350
+    textAtX <- 380
   }
   
   plot(colMeans(sunnyModel[aquifer_z_idx,,1]) - colMeans(shadyModel[aquifer_z_idx,,1]) ~ structure2use, 
@@ -101,17 +114,17 @@ tempdiffsplot <- function(sunnyModel, shadyModel, k, depth2HZ, yl = c(0,2.65), c
   mapply(function(t, c) lines(colMeans(sunnyModel[aquifer_z_idx,,t]) - colMeans(shadyModel[aquifer_z_idx,,t]) ~ structure2use, 
                               col = c,
                               ...),
-         seq(1,24,5),
+         seq(2,24,5),
          colorpal)
   mapply(function(t, c, xadj) text(structure2use[textAtX] + xadj, 
                                    (mean(sunnyModel[aquifer_z_idx,textAtX,t]) - mean(shadyModel[aquifer_z_idx,textAtX,t])), 
-                                   months(days[t], abbreviate = T),
+                                   paste0(months(days[t], abbreviate = T), "-", day(days[t])),
                                    col = c,
                                    pos = 3,
                                    cex = 2),
-         seq(1,24,5),
+         seq(2,24,5),
          colorpal,
-         c(0, -150, 0, -150, 0))
+         c(-690, -460, -230, 0, 230))
   
   #text(-30,2.6, paste0("K = ", k,"m/day, depth2HZ = ", depth2HZ, "m"), pos = 4, cex = 2)
 }
@@ -134,18 +147,10 @@ savetempdiffplots <- function(k = "100", d2hz = "0.5", sunnymodel, shadymodel, y
   dev.off()
 }
 
-kNames2 <- rep(c("100", "400"), each = 4)
-modelNames <- rep(c("0.5", "1.0", "2.0", "3.0"), times = 6)
-modelNames2 <- modelNames[1:8]
-listofSunny <- list(k100_0.5_sunny, k100_1.0_sunny, k100_2.0_sunny, k100_3.0_sunny,
-                    k400_0.5_sunny, k400_1.0_sunny, k400_2.0_sunny, k400_3.0_sunny)
-listofShady <- list(k100_0.5_shady, k100_1.0_shady, k100_2.0_shady, k100_3.0_shady,
-                    k400_0.5_shady, k400_1.0_shady, k400_2.0_shady, k400_3.0_shady)
-
 
 mapply(savetempdiffplots,
        kNames2,
        modelNames2,
        listofSunny,
        listofShady,
-       MoreArgs = list(lwd = 3, yl = c(-1,6), colorpal = hcl.colors(5, "RdYlGn")))
+       MoreArgs = list(lwd = 3, yl = c(-1,7), colorpal = hcl.colors(5, "RdYlGn")))
