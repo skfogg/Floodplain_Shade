@@ -90,28 +90,29 @@ tempdiffsplot2 <- function(sunnyModel, riveronlyModel, k, depth2HZ, yl = c(0,2.6
     structure2use <- model_400_1.0_xvals
     textAtX <- 350
   }
+  reverseindex <- seq(length(sunnyModel[,1,1]), 1, by = -1)
   
-  plot(colMeans(sunnyModel[aquifer_z_idx,,1]) - colMeans(riveronlyModel[aquifer_z_idx,,1]) ~ structure2use, 
+  plot(colMeans(sunnyModel[reverseindex[aquifer_z_idx],,1]) - colMeans(riveronlyModel[reverseindex[aquifer_z_idx],,1]) ~ structure2use, 
        type = "n",
        main = "Difference in HZ temps from riveronly model: Sunny",
        ylim = yl,
        xlim = c(0, 2000),
        xlab = "Flow Path Length (m)",
        ylab = "Temperature Difference")
-  mapply(function(t, c) lines(colMeans(sunnyModel[aquifer_z_idx,,t]) - colMeans(riveronlyModel[aquifer_z_idx,,t]) ~ structure2use, 
+  mapply(function(t, c) lines(colMeans(sunnyModel[reverseindex[aquifer_z_idx],,t]) - colMeans(riveronlyModel[reverseindex[aquifer_z_idx],,t]) ~ structure2use, 
                               col = c,
                               ...),
          seq(1,24,5),
          colorpal)
-  mapply(function(t, c, xadj) text(structure2use[textAtX] + xadj, 
-                                   (mean(sunnyModel[aquifer_z_idx,textAtX,t]) - mean(riveronlyModel[aquifer_z_idx,textAtX,t])), 
-                                   paste0(months(days[t], abbreviate = T), "-", day(days[t])),
-                                   col = c,
-                                   pos = 3,
-                                   cex = 2),
-         seq(1,24,5),
-         colorpal,
-         c(0, -150, 0, -150, 0))
+  # mapply(function(t, c, xadj) text(structure2use[textAtX] + xadj, 
+  #                                  (mean(sunnyModel[aquifer_z_idx,textAtX,t]) - mean(riveronlyModel[aquifer_z_idx,textAtX,t])), 
+  #                                  paste0(months(days[t], abbreviate = T), "-", day(days[t])),
+  #                                  col = c,
+  #                                  pos = 3,
+  #                                  cex = 2),
+  #        seq(1,24,5),
+  #        colorpal,
+  #        c(0, -150, 0, -150, 0))
   
   # text(-30,yl[2]-0.5, paste0("K = ", k,"m/day, depth2HZ = ", depth2HZ, "m"), pos = 4, cex = 2)
 }
@@ -139,7 +140,7 @@ mapply(savetempdiffplots2,
        modelNames2,
        listofSunny,
        listofRiveronly,
-       MoreArgs = list(yl = c(-6,11), lwd = 3, colorpal = hcl.colors(5, "RdYlGn")))
+       MoreArgs = list(yl = c(-12,12), lwd = 3, colorpal = hcl.colors(5, "RdYlGn")))
 
 ###################################################
 ###################################################
@@ -153,29 +154,30 @@ tempdiffsplot3 <- function(shadyModel, riveronlyModel, k, depth2HZ, yl = c(0,2.6
     structure2use <- model_400_1.0_xvals
     textAtX <- 350
   }
+  reverseindex <- seq(length(shadyModel[,1,1]), 1, by = -1)
   
-  plot(colMeans(shadyModel[aquifer_z_idx,,1]) - colMeans(riveronlyModel[aquifer_z_idx,,1]) ~ structure2use, 
+  plot(colMeans(shadyModel[reverseindex[aquifer_z_idx],,1]) - colMeans(riveronlyModel[reverseindex[aquifer_z_idx],,1]) ~ structure2use, 
        type = "n",
        main = "Difference in HZ temps from riveronly model: Shady",
        ylim = yl,
        xlim = c(0, 2000),
        xlab = "Flow Path Length (m)",
        ylab = "Temperature Difference")
-  mapply(function(t, c) lines(colMeans(shadyModel[aquifer_z_idx,,t]) - colMeans(riveronlyModel[aquifer_z_idx,,t]) ~ structure2use, 
+  mapply(function(t, c) lines(colMeans(shadyModel[reverseindex[aquifer_z_idx],,t]) - colMeans(riveronlyModel[reverseindex[aquifer_z_idx],,t]) ~ structure2use, 
                               col = c,
                               ...),
          seq(1,24,5),
          colorpal)
-  mapply(function(t, c, xadj) text(structure2use[textAtX] + xadj, 
-                                   (mean(shadyModel[aquifer_z_idx,textAtX,t]) - mean(riveronlyModel[aquifer_z_idx,textAtX,t])), 
-                                   paste0(months(days[t], abbreviate = T), "-", day(days[t])),
-                                   col = c,
-                                   pos = 3,
-                                   cex = 2),
-         seq(1,24,5),
-         colorpal,
-         c(0, -150, 0, -150, 0))
-  
+  # mapply(function(t, c, xadj) text(structure2use[textAtX] + xadj, 
+  #                                  (mean(shadyModel[aquifer_z_idx,textAtX,t]) - mean(riveronlyModel[aquifer_z_idx,textAtX,t])), 
+  #                                  paste0(months(days[t], abbreviate = T), "-", day(days[t])),
+  #                                  col = c,
+  #                                  pos = 3,
+  #                                  cex = 2),
+  #        seq(1,24,5),
+  #        colorpal,
+  #        c(0, -150, 0, -150, 0))
+  # 
   # text(-30,yl[2]-0.5, paste0("K = ", k,"m/day, depth2HZ = ", depth2HZ, "m"), pos = 4, cex = 2)
 }
 
@@ -203,7 +205,7 @@ mapply(savetempdiffplots3,
        modelNames2,
        listofShady,
        listofRiveronly,
-       MoreArgs = list(yl = c(-6,11), lwd = 3, colorpal = hcl.colors(5, "RdYlGn")))
+       MoreArgs = list(yl = c(-12,12), lwd = 3, colorpal = hcl.colors(5, "RdYlGn")))
 
 
 
