@@ -103,6 +103,7 @@ tempdiffsplot <- function(sunnyModel, shadyModel, k, depth2HZ, yl = c(0,2.65), c
     structure2use <- model_400_1.0_xvals
     textAtX <- 380
   }
+  reverseindex <- seq(length(sunnyModel[,1,1]), 1, by = -1)
   
   plot(colMeans(sunnyModel[aquifer_z_idx,,1]) - colMeans(shadyModel[aquifer_z_idx,,1]) ~ structure2use, 
        type = "n",
@@ -111,20 +112,20 @@ tempdiffsplot <- function(sunnyModel, shadyModel, k, depth2HZ, yl = c(0,2.65), c
        xlim = c(0, 2000),
        xlab = "Flow Path Length (m)",
        ylab = "Temperature Difference")
-  mapply(function(t, c) lines(colMeans(sunnyModel[aquifer_z_idx,,t]) - colMeans(shadyModel[aquifer_z_idx,,t]) ~ structure2use, 
+  mapply(function(t, c) lines(colMeans(sunnyModel[reverseindex[aquifer_z_idx],,t]) - colMeans(shadyModel[reverseindex[aquifer_z_idx],,t]) ~ structure2use, 
                               col = c,
                               ...),
          seq(2,24,5),
          colorpal)
-  mapply(function(t, c, xadj) text(structure2use[textAtX] + xadj, 
-                                   (mean(sunnyModel[aquifer_z_idx,textAtX,t]) - mean(shadyModel[aquifer_z_idx,textAtX,t])), 
-                                   paste0(months(days[t], abbreviate = T), "-", day(days[t])),
-                                   col = c,
-                                   pos = 3,
-                                   cex = 2),
-         seq(2,24,5),
-         colorpal,
-         c(-690, -460, -230, 0, 230))
+  # mapply(function(t, c, xadj) text(structure2use[textAtX] + xadj, 
+  #                                  (mean(sunnyModel[aquifer_z_idx,textAtX,t]) - mean(shadyModel[aquifer_z_idx,textAtX,t])), 
+  #                                  paste0(months(days[t], abbreviate = T), "-", day(days[t])),
+  #                                  col = c,
+  #                                  pos = 3,
+  #                                  cex = 2),
+  #        seq(2,24,5),
+  #        colorpal,
+  #        c(-690, -460, -230, 0, 230))
   
   #text(-30,2.6, paste0("K = ", k,"m/day, depth2HZ = ", depth2HZ, "m"), pos = 4, cex = 2)
 }
@@ -153,4 +154,4 @@ mapply(savetempdiffplots,
        modelNames2,
        listofSunny,
        listofShady,
-       MoreArgs = list(lwd = 3, yl = c(-1,7), colorpal = hcl.colors(5, "RdYlGn")))
+       MoreArgs = list(lwd = 3, yl = c(-1,8), colorpal = hcl.colors(5, "RdYlGn")))
