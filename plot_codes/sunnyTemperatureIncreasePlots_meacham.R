@@ -154,4 +154,4 @@ mapply(savetempdiffplots,
        modelNames2,
        listofSunny,
        listofShady,
-       MoreArgs = list(lwd = 3, yl = c(-1,8), colorpal = hcl.colors(5, "RdYlGn")))
+       MoreArgs = list(lwd = 4, yl = c(-1,8), colorpal = hcl.colors(5, "RdYlGn")))
