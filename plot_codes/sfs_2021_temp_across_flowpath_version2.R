@@ -34,9 +34,9 @@ eachmodel <- c(eachmodel1, eachmodel_ro)
 eachfolder <- c(eachfolder1, eachfolder_ro)
 
 for (i in 1:24){
-  #assign(eachmodel[i], readRDS(paste0(eachfolder[i], "/", eachmodel[i], "_dailymeans.RData")))
-  #assign(paste0(eachmodel[i], "_s"), readRDS(paste0(eachfolder[i], "/", eachmodel[i], "_modelstructure.RData")))
-  assign(paste0(eachmodel[i], "_f100"), readRDS(paste0(eachfolder[i], "/", eachmodel[i], "_first100m.RData")))
+  assign(eachmodel[i], readRDS(paste0(eachfolder[i], "/", eachmodel[i], "_dailymeans.RData")))
+  assign(paste0(eachmodel[i], "_s"), readRDS(paste0(eachfolder[i], "/", eachmodel[i], "_modelstructure.RData")))
+  #assign(paste0(eachmodel[i], "_f100"), readRDS(paste0(eachfolder[i], "/", eachmodel[i], "_first100m.RData")))
 }
 
 localbox <- "C:/Users/t24x137/Box/"
@@ -60,7 +60,7 @@ modelNames2 <- modelNames[1:8]
 listofSunny <- list(k100_0.5_sunny, k100_1.0_sunny, k100_2.0_sunny, k100_3.0_sunny,
                     k400_0.5_sunny, k400_1.0_sunny, k400_2.0_sunny, k400_3.0_sunny)
 listofSunnydaily <- list(k100_0.5_sunny_f100, k100_1.0_sunny_f100, k100_2.0_sunny_f100, k100_3.0_sunny_f100,
-                    k400_0.5_sunny_f100, k400_1.0_sunny_f100, k400_2.0_sunny_f100, k400_3.0_sunny_f100)
+                         k400_0.5_sunny_f100, k400_1.0_sunny_f100, k400_2.0_sunny_f100, k400_3.0_sunny_f100)
 
 listofShady <- list(k100_0.5_shady, k100_1.0_shady, k100_2.0_shady, k100_3.0_shady,
                     k400_0.5_shady, k400_1.0_shady, k400_2.0_shady, k400_3.0_shady)
@@ -71,54 +71,6 @@ listofRiveronly <- list(k100_0.5_riveronly, k100_1.0_riveronly, k100_2.0_riveron
                         k400_0.5_riveronly, k400_1.0_riveronly, k400_2.0_riveronly, k400_3.0_riveronly)
 listofRiveronlydaily <- list(k100_0.5_riveronly_f100, k100_1.0_riveronly_f100, k100_2.0_riveronly_f100, k100_3.0_riveronly_f100,
                              k400_0.5_riveronly_f100, k400_1.0_riveronly_f100, k400_2.0_riveronly_f100, k400_3.0_riveronly_f100)
-
-tempAcrossFP <- function(whichmodel, k, d2hz, bc, colorpal = hcl.colors(5, "RdYlGn"), ...){
-  png(paste0(getwd(),"/plots/tempAcrossFP_k", k, "_", d2hz, "_", bc,".png"),
-      height = 450,
-      width = 800)
-  par(cex.lab = 1.8,
-      cex.main = 2,
-      cex.axis = 1.5,
-      mar = c(5,5,5,1),
-      bg = "black",
-      fg = "ghostwhite",
-      col.axis = "ghostwhite",
-      col.main = "ghostwhite",
-      col.lab = "ghostwhite")
-  plot(colMeans(whichmodel[aquifer_z_idx,,t_idx[1]]) ~ get(paste0("model_", d2hz, "_xvals")),
-       type = "l",
-       ylab = expression(paste("Temperature (", degree, "C)")),
-       xlab = "Flow Path Length (m)",
-       ylim = c(3,19))
-  mapply(function(t, c) lines(colMeans(whichmodel[aquifer_z_idx,,t]) ~ get(paste0("model_", d2hz, "_xvals")), 
-                              col = c,
-                              ...),
-         t_idx,
-         colorpal)
-  dev.off()
-}
-
-mapply(tempAcrossFP,
-       whichmodel = listofRiveronly,
-       k = kNames2,
-       d2hz = modelNames2,
-       bc = rep("riveronly", times = 8),
-       MoreArgs = list(lwd = 3))
-
-mapply(tempAcrossFP,
-       whichmodel = listofSunny,
-       k = kNames2,
-       d2hz = modelNames2,
-       bc = rep("sunny", times = 8),
-       MoreArgs = list(lwd = 3))
-
-mapply(tempAcrossFP,
-       whichmodel = listofShady,
-       k = kNames2,
-       d2hz = modelNames2,
-       bc = rep("shady", times = 8),
-       MoreArgs = list(lwd = 3))
-
 x_to_plot <- 2:47
 days_id <- t_idx
 hours <- seq(1,24,by=5)
@@ -133,12 +85,11 @@ daytimesvector <- c(daytimes[,1], daytimes[,2], daytimes[,3], daytimes[,4], dayt
 lubridays <- ymd_hms("2021-01-01 00:00:00") + (outtimes$V1[seq(1,by = 23, length.out = 24)]-(365*86400*7))
 
 
-
-tempAcrossFP2 <- function(whichmodel, whichdaily, k, d2hz, bc, xrange = 2:49, colorpal = "RdYlGn", ...){
+tempAcrossFP2.2 <- function(whichmodel, whichdaily, k, d2hz, bc, xrange = 2:49, colorpal = "RdYlGn", a = 0.5, ...){
   
   reverseindex <- seq(length(whichmodel[,1,1]), 1, by = -1)
   
-  png(paste0(getwd(),"/plots/tempAcrossFP_k", k, "_", d2hz, "_", bc,".png"),
+  png(paste0(getwd(),"/plots/tempAcrossFP_version2_k", k, "_", d2hz, "_", bc,".png"),
       height = 400,
       width = 800)
   par(cex.lab = 1.8,
@@ -155,7 +106,7 @@ tempAcrossFP2 <- function(whichmodel, whichdaily, k, d2hz, bc, xrange = 2:49, co
   plot(whichdaily[xrange,2,30,1,"X"],
        rowMeans(whichdaily[xrange,2,aquifer_z_idx,1,"temp"]),
        type = "n",
-       ylim = c(1,23),
+       ylim = c(3,21),
        ylab = expression(paste("Temperature, ", degree, "C")),
        xlab = "Flow path length, m")
   mapply(function(t,c) lines(whichdaily[xrange,2,30,1,"X"],
@@ -163,31 +114,31 @@ tempAcrossFP2 <- function(whichmodel, whichdaily, k, d2hz, bc, xrange = 2:49, co
                              col = c,
                              lwd = 2),
          daytimesvector,
-         rep(hcl.colors(5, colorpal), each = 5))
+         rep(hcl.colors(5, colorpal, alpha = a), each = 5))
   
   plot(colMeans(whichmodel[reverseindex[aquifer_z_idx],,t_idx[1]]) ~ get(paste0("model_", d2hz, "_xvals")),
-       type = "l",
+       type = "n",
        ylab = expression(paste("Temperature (", degree, "C)")),
        xlab = "Flow Path Length (m)",
-       ylim = c(1,23))
+       ylim = c(3,21))
   mapply(function(t, c) lines(colMeans(whichmodel[reverseindex[aquifer_z_idx],,t]) ~ get(paste0("model_", d2hz, "_xvals")), 
                               col = c,
                               ...),
          t_idx,
-         hcl.colors(5, colorpal))
+         hcl.colors(5, colorpal, alpha = a))
   dev.off()
 }
 
 
 
 
-mapply(tempAcrossFP2,
+mapply(tempAcrossFP2.2,
        whichmodel = listofRiveronly,
        whichdaily = listofRiveronlydaily, 
        k = kNames2,
        d2hz = modelNames2,
        bc = rep("riveronly", times = 8),
-       MoreArgs = list(lwd = 3))
+       MoreArgs = list(lwd = 3, a = 0.25))
 
 mapply(tempAcrossFP2,
        whichmodel = listofSunny,
@@ -206,58 +157,4 @@ mapply(tempAcrossFP2,
        MoreArgs = list(lwd = 3))
 
 
-### MAke plot to zoom in Pressi ##
-
-
-whichmodel = listofShady[[2]]
-whichdaily = listofShadydaily[[2]]
-k = "100"
-d2hz = "1.0"
-bc = "shady"
-xrange = 2:49
-colorpal = "RdYlGn"
-
-reverseindex <- seq(length(whichmodel[,1,1]), 1, by = -1)
-
-png(paste0(getwd(),"/plots/tempAcrossFP_k", k, "_", d2hz, "_", bc," _x100.png"),
-    height = 400,
-    width = 800)
-par(cex.lab = 1.8,
-    cex.main = 2,
-    cex.axis = 1.5,
-    mar = c(5,5,5,1),
-    bg = "black",
-    fg = "ghostwhite",
-    col.axis = "ghostwhite",
-    col.main = "ghostwhite",
-    col.lab = "ghostwhite")
-layout(matrix(c(1,2,2,2), 1, 4))
-
-plot(whichdaily[xrange,2,30,1,"X"],
-     rowMeans(whichdaily[xrange,2,aquifer_z_idx,1,"temp"]),
-     type = "n",
-     ylim = c(1,23),
-     ylab = expression(paste("Temperature, ", degree, "C")),
-     xlab = "Flow path length, m")
-mapply(function(t,c) lines(whichdaily[xrange,2,30,1,"X"],
-                           rowMeans(whichdaily[xrange,2,aquifer_z_idx,t,"temp"]),
-                           col = c,
-                           lwd = 2),
-       daytimesvector,
-       rep(hcl.colors(5, colorpal), each = 5))
-
-plot(colMeans(whichmodel[reverseindex[aquifer_z_idx],,t_idx[1]]) ~ get(paste0("model_", d2hz, "_xvals")),
-     type = "l",
-     ylab = expression(paste("Temperature (", degree, "C)")),
-     xlab = "Flow Path Length (m)",
-     ylim = c(1,23))
-mapply(function(t, c) lines(colMeans(whichmodel[reverseindex[aquifer_z_idx],,t]) ~ get(paste0("model_", d2hz, "_xvals")), 
-                            col = c,
-                            lwd = 3),
-       t_idx,
-       hcl.colors(5, colorpal))
-
-abline(v = 100, lty = 3, lwd = 5, col = "white")
-
-dev.off()
 
