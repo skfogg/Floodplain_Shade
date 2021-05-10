@@ -38,7 +38,11 @@ png(paste0(box_directory, "meacham_soil_bc_plot.png"),
     width = 800*5,
     height = 350*5,
     res = 72*5)
-par(bg = "black",
+par(cex.lab = 1.3,
+    cex.main = 1.5,
+    cex.axis = 1.3,
+    mar = c(5,5,5,1),
+    bg = "black",
     fg = "ghostwhite",
     col.axis = "ghostwhite",
     col.lab = "ghostwhite",
@@ -50,16 +54,54 @@ plot.zoo(sunnymodelx["2020/2021"], col = "orange",
          ylim = c(0,31),
          main = "Meacham Creek Floodplain Soil Temperatures",
          lwd =2)
+lines(as.zoo(includeNATimes(sunshadex$suntemp)), col = "khaki1",
+      lwd = 1)
 lines(as.zoo(shadymodelx["2020/2021"]), col = "brown3",
       lwd = 2)
-lines(as.zoo(includeNATimes(sunshadex$suntemp)), col = "gold",
-      lwd = 1)
-lines(as.zoo(includeNATimes(sunshadex$shadetemp)), col = "lightcoral",
+
+lines(as.zoo(includeNATimes(sunshadex$shadetemp)), col = "rosybrown1",
       lwd = 1)
 legend("topleft", c("sunny", "shady"), lwd = c(2,2), 
        col = c("gold", "brown3"), bty = "n",
        cex = 1.5)
 dev.off()
+
+###########
+#############
+################
+###################
+png(paste0(box_directory, "meacham_soil_bc_plot_full_data.png"),
+    width = 800*5,
+    height = 350*5,
+    res = 72*5)
+par(cex.lab = 1.3,
+    cex.main = 1.5,
+    cex.axis = 1.3,
+    mar = c(5,5,5,1),
+    bg = "black",
+    fg = "ghostwhite",
+    col.axis = "ghostwhite",
+    col.lab = "ghostwhite",
+    col.main = "ghostwhite",
+    col.sub = "ghostwhite")
+plot.zoo(sunnymodelx["2020/2021"], col = "orange",
+         xlab = "Date",
+         ylab = expression(paste("Temperature, ", degree, "C")),
+         ylim = c(0,31),
+         main = "Meacham Creek Floodplain Soil Temperatures",
+         lwd =2)
+lines(as.zoo(includeNATimes(sunnysoilx)), col = "khaki1",
+      lwd = 1)
+
+lines(as.zoo(shadymodelx["2020/2021"]), col = "brown3",
+      lwd = 2)
+lines(as.zoo(includeNATimes(sunshadex$shadetemp)), col = "rosybrown1",
+      lwd = 1)
+legend("topleft", c("sunny", "shady"), lwd = c(2,2), 
+       col = c("gold", "brown3"), bty = "n",
+       cex = 1.5)
+dev.off()
+
 
 
 
