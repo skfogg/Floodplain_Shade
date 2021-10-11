@@ -33,9 +33,9 @@ days <- ymd_hms("2021-01-01 00:00:00") + (outtimes$V1[seq(1,by = 23, length.out 
 
 #-------------------------------------------------------------
 
-model_100_1.0_xvals <- shady_100_1.0_str[,2,1,"X"]
-model_400_1.0_xvals <- shady_400_1.0_str[,2,1,"X"]
-model_1.0_zvals <- shady_100_1.0_str[1,2,,"Z"]
+model_100_1.0_xvals <- k100_1.0_riveronly_s[,2,1,"X"]
+model_400_1.0_xvals <- k400_1.0_riveronly_s[,2,1,"X"]
+model_1.0_zvals <- k100_1.0_riveronly_s[1,2,,"Z"]
 aquifer_z_idx <- 17:47
 
 ## Temperature differences across all flow paths ##
@@ -50,21 +50,22 @@ tempdiffsplot2 <- function(sunnyModel, riveronlyModel, k, depth2HZ, yl = c(0,2.6
     structure2use <- model_400_1.0_xvals
     textAtX <- 900
   }
+  reverseindex <- seq(length(sunnyModel[,1,1]), 1, by = -1)
   
-  plot(colMeans(sunnyModel[aquifer_z_idx,,1]) - colMeans(riveronlyModel[aquifer_z_idx,,1]) ~ structure2use, 
+  plot(colMeans(sunnyModel[reverseindex[aquifer_z_idx],,1]) - colMeans(riveronlyModel[reverseindex[aquifer_z_idx],,1]) ~ structure2use, 
        type = "n",
        main = "Difference in HZ temps from riveronly model: Sunny",
        ylim = yl,
        xlim = c(0, 2000),
        xlab = "Flow Path Length (m)",
        ylab = "Temperature Difference")
-  mapply(function(t, c) lines(colMeans(sunnyModel[aquifer_z_idx,,t]) - colMeans(riveronlyModel[aquifer_z_idx,,t]) ~ structure2use, 
+  mapply(function(t, c) lines(colMeans(sunnyModel[reverseindex[aquifer_z_idx],,t]) - colMeans(riveronlyModel[reverseindex[aquifer_z_idx],,t]) ~ structure2use, 
                               col = c,
                               ...),
          seq(1,24,5),
          hcl.colors(5))
   mapply(function(t, c, xadj) text(structure2use[textAtX] + xadj, 
-                                   (mean(sunnyModel[aquifer_z_idx,textAtX,t]) - mean(riveronlyModel[aquifer_z_idx,textAtX,t])), 
+                                   (mean(sunnyModel[reverseindex[aquifer_z_idx],textAtX,t]) - mean(riveronlyModel[reverseindex[aquifer_z_idx],textAtX,t])), 
                                    months(days[t], abbreviate = T),
                                    col = c,
                                    pos = 3,
@@ -92,12 +93,12 @@ savetempdiffplots2 <- function(k = "100", d2hz = "0.5", sunnymodel, riveronlyMod
 
 kNames2 <- rep(c("100", "400"), each = 4)
 modelNames2 <- modelNames[1:8]
-listofSunny <- list(sunny_100_0.5, sunny_100_1.0, sunny_100_2.0, sunny_100_3.0,
-                    sunny_400_0.5, sunny_400_1.0, sunny_400_2.0, sunny_400_3.0)
-listofShady <- list(shady_100_0.5, shady_100_1.0, shady_100_2.0, shady_100_3.0,
-                    shady_400_0.5, shady_400_1.0, shady_400_2.0, shady_400_3.0)
-listofRiveronly <- list(riveronly_100_0.5, riveronly_100_1.0, riveronly_100_2.0, riveronly_100_3.0,
-                        riveronly_400_0.5, riveronly_400_1.0, riveronly_400_2.0, riveronly_400_3.0)
+# #listofSunny <- list(sunny_100_0.5, sunny_100_1.0, sunny_100_2.0, sunny_100_3.0,
+#                     sunny_400_0.5, sunny_400_1.0, sunny_400_2.0, sunny_400_3.0)
+# listofShady <- list(shady_100_0.5, shady_100_1.0, shady_100_2.0, shady_100_3.0,
+#                     shady_400_0.5, shady_400_1.0, shady_400_2.0, shady_400_3.0)
+# listofRiveronly <- list(riveronly_100_0.5, riveronly_100_1.0, riveronly_100_2.0, riveronly_100_3.0,
+#                         riveronly_400_0.5, riveronly_400_1.0, riveronly_400_2.0, riveronly_400_3.0)
 mapply(savetempdiffplots2,
        kNames2,
        modelNames2,
