@@ -158,7 +158,7 @@ water_temp <- water_temp[!complete.cases(str_locate(water_temp$DateTime, "2020-0
 head(water_temp)
 tail(water_temp)
 
-write.csv(water_temp, paste0(directory, "/water_temp.csv"), row.names = F)
+write.csv(water_temp, paste0(directory, "/watertemp.csv"), row.names = F)
 
 
 
