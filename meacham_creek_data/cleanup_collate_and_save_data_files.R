@@ -125,39 +125,119 @@ water_temp <- read.csv(paste0(directory, "/water/meacham_creek_temperature.csv")
                        col.names = c("DateTime", "Temp", "trash1", "trash2", "trash3"))
 water_temp <- water_temp[,1:2]
 head(water_temp)
-
-#### CHANGE TO UTC-8 (previously UTC-7)
-water_temp$DateTime <- mdy_hm(water_temp$DateTime)
-water_temp$DateTime <- water_temp$DateTime-3600
-head(water_temp)
-
-watertempx <- xts(zoo(water_temp$Temp, order.by=water_temp$DateTime))
-plot.zoo(watertempx["2021-07/"])
-plot.zoo(watertempx["2021-07-22/2021-07-25"])
-plot(watertempx["2021-07-18/2021-07-22"])
-## Any date after July 18, 2021 needs to be cut.
-
-plot.zoo(watertempx)
-plot.zoo(watertempx["/2021-07-18"])
-
-par(mfrow = c(2,1),
-    mar = c(1,2,1,1))
-plot.zoo(watertempx["2020-07"], ylim = c(12,30))
-plot.zoo(watertempx["2021-07"], ylim = c(12,30))
-
-# Check subset
-plot(subset(water_temp, DateTime < mdy("07/19/2021"))$Temp, type = "l")
-plot.zoo(watertempx["/2021-07-18"])
-water_temp <- subset(water_temp, DateTime < mdy("07/19/2021"))
-
-head(water_temp)
-plot(watertempx["2020-06-17"])
-plot(watertempx["2020-06-17/2020-06-20"])
-
-water_temp <- water_temp[!complete.cases(str_locate(water_temp$DateTime, "2020-06-17")),]
-head(water_temp)
 tail(water_temp)
 
+## (1) Get rid of first date of data, 06/17/2020:
+# change DateTime to Posixct
+water_temp$DateTime <- mdy_hm(water_temp$DateTime)
+# test subset
+head(subset(water_temp, DateTime >= mdy("06-18-20")))
+# remove first date
+water_temp <- subset(water_temp, DateTime >= mdy("06-18-20"))
+head(water_temp)
+
+
+## (2) Fix Daylight savings: 11-01-20 and 03-14-21
+# make into xts format
+watertx <- xts(zoo(water_temp$Temp, order.by = water_temp$DateTime))
+
+# PDT GROUP 1:
+watertx_pdt1 <- watertx["/2020-11-01 01:00:00"]
+# check beginning, should be 2020-06-18 00:00:00
+head(watertx_pdt1)
+# check ending of this group, should be 2020-11-01 01:00:00 (twice)
+tail(watertx_pdt1)
+# this is the one that belongs to pst
+watertx_pdt1["2020-11-01 01:00:00"][2]
+# test subset, now should only have one 2020-11-01 01:00:00
+tail(watertx_pdt1[-length(watertx_pdt1)])
+# re-save without the repeat 1am value:
+watertx_pdt1 <- watertx_pdt1[-length(watertx_pdt1)]
+# check:
+tail(watertx_pdt1)
+# subtract an hour:
+index(watertx_pdt1) <- index(watertx_pdt1) - 3600
+# check: (should be 2020-11-01 00:00:00)
+tail(watertx_pdt1)
+# now need to remove the first entry because it is before 2020-06-18 00:00:00:
+head(watertx_pdt1)
+# remove first entry:
+watertx_pdt1 <- watertx_pdt1[-1]
+# re-check head
+head(watertx_pdt1)
+
+
+# PST GROUP:
+watertx_pst <- watertx["2020-11-01 01:00:00/2021-03-14 01:00:00"]
+# check beginning, should be 2020-11-01 01:00:00 (twice)
+head(watertx_pst)
+# remove the first 
+watertx_pst <- watertx_pst[-1]
+# check:
+head(watertx_pst)
+# check ending, should be 2021-03-14 01:00:00
+tail(watertx_pst)
+
+# PDT GROUP 2:
+watertx_pdt2 <- watertx["2021-03-14 03:00:00/"]
+# check beginning:
+head(watertx_pdt2)
+# subtract an hour:
+index(watertx_pdt2) <- index(watertx_pdt2) - 3600
+# check beginning, should now be 2021-03-14 02:00:00
+head(watertx_pdt2)
+# now remove all dates after 07-18-2021
+watertx_pdt2 <- watertx_pdt2["/2021-07-18"]
+# check ending, should now be 2021-07-18 23:00:00
+tail(watertx_pdt2)
+
+## NOW COMBINE:
+watertx_corrected <- c(watertx_pdt1, watertx_pst, watertx_pdt2)
+# check beginning:
+head(watertx_corrected)
+# check ending:
+tail(watertx_corrected)
+# check 2020-11-01:
+watertx_corrected["2020-11-01"]
+# check 2021-04-14:
+watertx_corrected["2021-04-14"]
+
+
+## Should be divisible by 24:
+length(watertx_corrected)/24
+# IT IS NOT !!
+
+## Find the days with readings not equal to 24:
+unique(apply.daily(watertx_corrected, length))
+subset(apply.daily(watertx_corrected, length), x == 25)
+
+## 2020-08-28:
+watertx_corrected["2020-08-28"]
+# "2020-08-28 11:41:00"
+
+## 2020-11-09:
+watertx_corrected["2020-11-09"]
+# "2020-11-09 11:57:00"
+
+# Create a data.frame from the xts/zoo values
+wt <- data.frame(DateTime = index(watertx_corrected),
+           Temp = coredata(watertx_corrected))
+
+# create a new data.frame with those weird dates removed
+wt2 <- wt[!wt$DateTime %in% c(ymd_hms("2020-08-28 11:41:00", "2020-11-09 11:57:00")),]
+
+# check to see if it is divisible by 24:
+length(wt2$DateTime)/24
+## IT IS
+
+## Re-assign water_temp to be the corrected water temperature data
+water_temp <- wt2
+# make sure names are right
+names(water_temp)
+# correct names:
+names(water_temp) <- c("DateTime", "Temp")
+
+## SAVE corrected water_temp data:
 write.csv(water_temp, paste0(directory, "/watertemp.csv"), row.names = F)
 
 
