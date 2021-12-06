@@ -95,8 +95,6 @@ meachammodels <- list(shadysoil = 1, sunnysoil = 2, watertemp = 3)
 
 
 for (i in 1:3){
-  
-
 ### --------------------------- DAILY MEAN MODEL --------------------------- ###
 ### ------------------------------------------------------------------------ ###
 # start val for m:
@@ -167,11 +165,11 @@ lines(predict(dailyfreqmodel), col = "yellow")
 
 ## --------------------- COMPOUND MODEL -------------------------- ##
 ## --------------------------------------------------------------- ##
+t10 <- seq(0, 31536000*10, by = 3600)
+means <- coef(dailymeanmodel)[1] + coef(dailymeanmodel)[2]*sin(2*pi*(1/31536000)*t10 + coef(dailymeanmodel)[3])
+amps <- coef(dailyampmodel)[1] + coef(dailyampmodel)[2]*sin(2*pi*(1/31536000)*t10 + coef(dailyampmodel)[3])
 
-means <- coef(dailymeanmodel)[1] + coef(dailymeanmodel)[2]*sin(2*pi*(1/31536000)*t2 + coef(dailymeanmodel)[3])
-amps <- coef(dailyampmodel)[1] + coef(dailyampmodel)[2]*sin(2*pi*(1/31536000)*t2 + coef(dailyampmodel)[3])
-
-meachammodels[[i]] <- means + amps*sin(2*pi*(1/86400)*t2 + coef(dailyfreqmodel)[2])
+meachammodels[[i]] <- means + amps*sin(2*pi*(1/86400)*t10 + coef(dailyfreqmodel)[2])
 }
 
 
@@ -199,28 +197,29 @@ lines(rawdata[[1]]$Temp ~ rawdata[[1]]$NumTimeOfYr,
       col = "brown")
 lines(rawdata[[2]]$Temp ~ rawdata[[2]]$NumTimeOfYr,
       col = "orange")
-plot(meachammodels[[3]] ~ t2, type = "l",
+plot(meachammodels[[3]] ~ t10, type = "l",
      ylim = c(0,35),
      col = "dodgerblue")
-lines(meachammodels[[1]] ~ t2,
+lines(meachammodels[[1]] ~ t10,
       col = "brown")
-lines(meachammodels[[2]] ~ t2,
+lines(meachammodels[[2]] ~ t10,
       col = "orange")
 
-
+#### MAKE 10 YEARS OF DATA ####
+meachamshadysoil <- meachammodels[[1]]
+meachamsunnysoil <- meachammodels[[2]]
+meachamwatertemp <- meachammodels[[3]]
 
 ########
 
-t10 <- seq(0, 31536000*10, by = 3600)
-means10yr <- coef(dailymeanmodel)[1] + coef(dailymeanmodel)[2]*sin(2*pi*(1/31536000)*t10 + coef(dailymeanmodel)[3])
-amps10yr <- coef(dailyampmodel)[1] + coef(dailyampmodel)[2]*sin(2*pi*(1/31536000)*t10 + coef(dailyampmodel)[3])
 
-meachamshade10yr <- means10yr + amps10yr*sin(2*pi*(1/86400)*t10 + coef(dailyfreqmodel)[2])
-plot(meachamshade10yr)
+meachamshadydf <- data.frame(s = t10, e = t10+3600, temp = meachamshadysoil)
+meachamsunnydf <- data.frame(s = t10, e = t10+3600, temp = meachamsunnysoil)
+meachamwaterdf <- data.frame(s = t10, e = t10+3600, temp = meachamwatertemp)
 
-meachamshade10yrdf <- data.frame(s = t10, e = t10+3600, temp = meachamshade10yr)
-write.csv(meachamshade10yrdf, paste0(box_directory, "shade/meachamshade10yr.csv"))
-
+write.csv(meachamshadydf, "meacham_creek_data/final_meacham_hgs_input/meachamshadydf.csv")
+write.csv(meachamsunnydf, "meacham_creek_data/final_meacham_hgs_input/meachamsunnydf.csv")
+write.csv(meachamwaterdf, "meacham_creek_data/final_meacham_hgs_input/meachamwaterdf.csv")
 
 
 
