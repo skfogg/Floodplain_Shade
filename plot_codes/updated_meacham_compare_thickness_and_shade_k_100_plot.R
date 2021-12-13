@@ -6,36 +6,44 @@
 library(HGSReader)
 library(lubridate)
 
-box_folder <- "C:/Users/skati/Box/Floodplain_Shade_Box"
+box_directory <- "C:/Users/skati/Box/Floodplain_Shade_Box/meacham_updated_results/"
 
-shady_100_0.5 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/shady/soil_0.5m/soil_0.5m_dailymeans.RData")
-shady_100_1.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/shady/soil_1.0m/soil_1.0m_dailymeans.RData")
-shady_100_2.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/shady/soil_2.0m/soil_2.0m_dailymeans.RData")
-shady_100_3.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/shady/soil_3.0m/soil_3.0m_dailymeans.RData")
+kvals <- rep(c("100", "400"), each = 12)
+bcvals <- rep(rep(c("sunny", "shady", "riveronly"), each = 4), times = 2)
+soilvals <- rep(c("0.5", "1.0", "2.0", "3.0"), times = 6)
 
-sunny_100_0.5 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/sunny/soil_0.5m/soil_0.5m_dailymeans.RData")
-sunny_100_1.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/sunny/soil_1.0m/soil_1.0m_dailymeans.RData")
-sunny_100_2.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/sunny/soil_2.0m/soil_2.0m_dailymeans.RData")
-sunny_100_3.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/sunny/soil_3.0m/soil_3.0m_dailymeans.RData")
+eachfolder <- numeric(24)
+for (i in 1:24){
+  eachfolder[i] <- paste0(box_directory, "K_", kvals[i], "m_day/", bcvals[i], "/", "soil_", soilvals[i], "m")
+}
 
-riveronly_100_0.5 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/riveronly/soil_0.5m/soil_0.5m_dailymeans.RData")
-riveronly_100_1.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/riveronly/soil_1.0m/soil_1.0m_riveronly_dailymeans.RData")
-riveronly_100_2.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/riveronly/soil_2.0m/soil_2.0m_riveronly_dailymeans.RData")
-riveronly_100_3.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/riveronly/soil_3.0m/soil_3.0m_dailymeans.RData")
+eachmodel <- numeric(24)
+for (i in 1:24){
+  eachmodel[i] <- paste0("k", kvals[i], "_", soilvals[i], "_", bcvals[i])
+}
 
-structure_0.5 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/shady/soil_0.5m/soil_0.5m_modelstructure.RData")
-structure_1.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/shady/soil_1.0m/soil_1.0m_modelstructure.RData")
-structure_2.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/shady/soil_2.0m/soil_2.0m_modelstructure.RData")
-structure_3.0 <- readRDS("C:/Users/t24x137/Box/Floodplain_Shade_Box/K_100m_day/shady/soil_3.0m/soil_3.0m_modelstructure.RData")
+for (i in 1:12){
+  assign(eachmodel[i], readRDS(paste0(eachfolder[i], "/", eachmodel[i], "_dailymeans.RData")))
+  assign(paste0(eachmodel[i], "_s"), readRDS(paste0(eachfolder[i], "/", eachmodel[i], "_modelstructure.RData")))
+}
+
+
+structure_0.5 <- k100_0.5_riveronly_s
+structure_1.0 <- k100_1.0_riveronly_s
+structure_2.0 <- k100_2.0_riveronly_s
+structure_3.0 <- k100_3.0_riveronly_s
 
 structureList <- list(structure_0.5, structure_1.0, structure_2.0, structure_3.0)
-tempList_shady <- list(shady_100_0.5, shady_100_1.0, shady_100_2.0, shady_100_3.0)
-tempList_sunny <- list(sunny_100_0.5, sunny_100_1.0, sunny_100_2.0, sunny_100_3.0)
-tempList_riverOnly <- list(riveronly_100_0.5, riveronly_100_1.0, riveronly_100_2.0, riveronly_100_3.0)
+
+tempList_shady <- list(k100_0.5_shady, k100_1.0_shady, k100_2.0_shady, k100_3.0_shady)
+tempList_sunny <- list(k100_0.5_sunny, k100_1.0_sunny, k100_2.0_sunny, k100_3.0_sunny)
+tempList_riverOnly <- list(k100_0.5_riveronly, k100_1.0_riveronly, k100_2.0_riveronly, k100_3.0_riveronly)
 
 x_to_800_idx <- 1:445
 aquifer_z_idx <- 17:47
-outtimes <- read.table("C:/Users/t24x137/Box/HGSwork/outputTimes_inputTemps/OutputTimesYr7_fulldays.txt")
+
+localbox <- "C:/Users/skati/Box/"
+outtimes <- read.table(paste0(localbox, "HGSwork/outputTimes_inputTemps/OutputTimesYr7_fulldays.txt"))
 days <- ymd_hms("2021-01-01 00:00:00") + (outtimes$V1[seq(1,by = 23, length.out = 24)]-(365*86400*7))
 
 plotcols <- hcl.colors(5, "Oranges", rev = F)
@@ -43,7 +51,7 @@ plotcols <- hcl.colors(5, "Oranges", rev = F)
 plotcols <- plotcols[1:4] # when rev = F
 plotlwd <- 3
 time_idx <- c(2,8,14,20)
-x_idx <- 1:490
+x_idx <- 1:413
 
 originalpar <- par()
   #par(mfcol = c(1,1), oma = c(0,0,0,0), mar = c(5,4,4,1)+0.1)
@@ -83,7 +91,7 @@ plotacrosstime <- function(x, temp, modelrun) {
 #     cex.axis = 1.5)
 
 
-png("plots/compare_thickness_and_shade_k_100_w_riveronly_x2000.png",
+png("plots/compare_thickness_and_shade_k_100.png",
     height = 1000*5,
     width = 900*5,
     res = 72*5)
