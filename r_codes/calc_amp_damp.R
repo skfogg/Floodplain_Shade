@@ -1,5 +1,5 @@
 ##
-## Calculate amplitude damping (daily and annual signal damping)
+## Calculate amplitude damping (annual signal damping)
 ##
 library(lubridate)
 

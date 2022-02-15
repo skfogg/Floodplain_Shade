@@ -1,0 +1,171 @@
+##
+## Calculate phase lag (annual signal damping)
+##
+library(lubridate)
+
+####------ READ IN ALL DATA ------####
+box_directory <- "C:/Users/skati/Box/Floodplain_Shade_Box/meacham_updated_results/"
+
+kvals <- rep(c("100", "400"), each = 12)
+bcvals <- rep(rep(c("sunny", "shady", "riveronly"), each = 4), times = 2)
+soilvals <- rep(c("0.5", "1.0", "2.0", "3.0"), times = 6)
+
+eachfolder <- numeric(24)
+for (i in 1:24){
+  eachfolder[i] <- paste0(box_directory, "K_", kvals[i], "m_day/", bcvals[i], "/", "soil_", soilvals[i], "m")
+}
+
+eachmodel <- numeric(24)
+for (i in 1:24){
+  eachmodel[i] <- paste0("k", kvals[i], "_", soilvals[i], "_", bcvals[i])
+}
+
+for (i in 1:24){
+  assign(eachmodel[i], readRDS(paste0(eachfolder[i], "/", eachmodel[i], "_dailymeans.RData")))
+  assign(paste0(eachmodel[i], "_s"), readRDS(paste0(eachfolder[i], "/", eachmodel[i], "_modelstructure.RData")))
+}
+
+listofSunny <- as.list(k100_0.5_sunny, k100_1.0_sunny, k100_2.0_sunny, k100_3.0_sunny,
+                       k400_0.5_sunny, k400_1.0_sunny, k400_2.0_sunny, k400_3.0_sunny)
+listofShady <- list(k100_0.5_shady, k100_1.0_shady, k100_2.0_shady, k100_3.0_shady,
+                    k400_0.5_shady, k400_1.0_shady, k400_2.0_shady, k400_3.0_shady)
+listofRiverOnly <- list(k100_0.5_riveronly, k100_1.0_riveronly, k100_2.0_riveronly, k100_3.0_riveronly,
+                        k400_0.5_riveronly, k400_1.0_riveronly, k400_2.0_riveronly, k400_3.0_riveronly) 
+
+
+### ---- Time Data --- ###
+outtimes <- read.table("C:/Users/skati/Box/HGSwork/outputTimes_inputTemps/OutputTimesYr7_fulldays.txt")
+lubridays <- ymd_hms("2021-01-01 00:00:00") + (outtimes$V1[seq(1,by = 23, length.out = 24)]-(365*86400*7))
+
+# x-values (should be the same for all models)
+x_vals <- k400_1.0_riveronly_s[,1,1,"X"]
+
+jd <- c(1,16,31,46,61,76,91,106,121,136,151,166,181,196,211,226,
+        241,256,271,286,301,316,331,346)
+
+calc_phase <- function(x){
+  hz_mean <- matrix(data = 0, nrow = 24, ncol = 413)
+  for(i in 1:413){
+    hz_mean[,i] <- colMeans(x[1:40, i, ])
+  }
+  row.names(hz_mean) <- jd
+  phases <- length(413)
+  for(i in 1:413){
+    phases[i] <-   names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i])
+  }
+  return(as.numeric(phases))
+}
+k100_0.5_shady_phase <- calc_phase(k100_0.5_shady)
+k100_1.0_shady_phase <- calc_phase(k100_1.0_shady)
+k100_2.0_shady_phase <- calc_phase(k100_2.0_shady)
+k100_3.0_shady_phase <- calc_phase(k100_3.0_shady)
+
+k100_0.5_sunny_phase <- calc_phase(k100_0.5_sunny)
+k100_1.0_sunny_phase <- calc_phase(k100_1.0_sunny)
+k100_2.0_sunny_phase <- calc_phase(k100_2.0_sunny)
+k100_3.0_sunny_phase <- calc_phase(k100_3.0_sunny)
+
+
+k400_0.5_shady_phase <- calc_phase(k400_0.5_shady)
+k400_1.0_shady_phase <- calc_phase(k400_1.0_shady)
+k400_2.0_shady_phase <- calc_phase(k400_2.0_shady)
+k400_3.0_shady_phase <- calc_phase(k400_3.0_shady)
+
+k400_0.5_sunny_phase <- calc_phase(k400_0.5_sunny)
+k400_1.0_sunny_phase <- calc_phase(k400_1.0_sunny)
+k400_2.0_sunny_phase <- calc_phase(k400_2.0_sunny)
+k400_3.0_sunny_phase <- calc_phase(k400_3.0_sunny)
+
+cols4 <- hcl.colors(4)
+
+# k 100
+par(mfrow = c(2,1), mar = c(2,2,1,1))
+plot(k100_0.5_shady_phase ~ x_vals, type = "l", col = cols4[1], lwd = 2, ylim = c(200,360)) 
+lines(k100_1.0_shady_phase ~ x_vals, col = cols4[2], lwd = 2)
+lines(k100_2.0_shady_phase ~ x_vals, col = cols4[3], lwd = 2)
+lines(k100_3.0_shady_phase ~ x_vals, col = cols4[4], lwd = 2)
+legend("topright", c("0.5", "1.0", "2.0", "3.0"), lwd = 2, col = cols4[1:4])
+
+plot(k100_0.5_sunny_phase ~ x_vals, type = "l", col = cols4[1], lwd = 2, ylim = c(200,360)) 
+lines(k100_1.0_sunny_phase ~ x_vals, col = cols4[2], lwd = 2)
+lines(k100_2.0_sunny_phase ~ x_vals, col = cols4[3], lwd = 2)
+lines(k100_3.0_sunny_phase ~ x_vals, col = cols4[4], lwd = 2)
+legend("topright", c("0.5", "1.0", "2.0", "3.0"), lwd = 2, col = cols4[1:4])
+
+## k 400
+par(mfrow = c(2,1), mar = c(2,2,1,1))
+plot(k400_0.5_shady_phase ~ x_vals, type = "l", col = cols4[1], lwd = 2, ylim = c(200,360)) 
+lines(k400_1.0_shady_phase ~ x_vals, col = cols4[2], lwd = 2)
+lines(k400_2.0_shady_phase ~ x_vals, col = cols4[3], lwd = 2)
+lines(k400_3.0_shady_phase ~ x_vals, col = cols4[4], lwd = 2)
+legend("topright", c("0.5", "1.0", "2.0", "3.0"), lwd = 2, col = cols4[1:4])
+
+plot(k400_0.5_sunny_phase ~ x_vals, type = "l", col = cols4[1], lwd = 2, ylim = c(200,360)) 
+lines(k400_1.0_sunny_phase ~ x_vals, col = cols4[2], lwd = 2)
+lines(k400_2.0_sunny_phase ~ x_vals, col = cols4[3], lwd = 2)
+lines(k400_3.0_sunny_phase ~ x_vals, col = cols4[4], lwd = 2)
+legend("topright", c("0.5", "1.0", "2.0", "3.0"), lwd = 2, col = cols4[1:4])
+
+
+
+### this is necessary for calculating phases of the "river only" output:
+## THE PROBLEM:
+k100_0.5_riveronly_phase <- calc_phase(k100_0.5_riveronly)
+k100_1.0_riveronly_phase <- calc_phase(k100_1.0_riveronly)
+k100_2.0_riveronly_phase <- calc_phase(k100_2.0_riveronly)
+k100_3.0_riveronly_phase <- calc_phase(k100_3.0_riveronly)
+
+cols4 <- hcl.colors(4)
+
+plot(k100_0.5_riveronly_phase ~ x_vals, type = "p", col = cols4[1], lwd = 2) 
+lines(k100_1.0_riveronly_phase ~ x_vals, col = cols4[2], lwd = 2)
+lines(k100_2.0_riveronly_phase ~ x_vals, col = cols4[3], lwd = 2)
+lines(k100_3.0_riveronly_phase ~ x_vals, col = cols4[4], lwd = 2)
+legend("topright", c("0.5", "1.0", "2.0", "3.0"), lwd = 2, col = cols4[1:4])
+
+## HACK-ASSED SOLUTION:
+x = k100_0.5_riveronly
+hz_mean <- matrix(data = 0, nrow = 24, ncol = 413)
+for(i in 1:413){
+  hz_mean[,i] <- round(colMeans(x[1:40, i, ]), 4)
+}
+row.names(hz_mean) <- jd
+
+phases <- c(rep(0, times = 413))
+phases[1] <- as.numeric(names(hz_mean[hz_mean[,1] == max(hz_mean[,1]),1]))
+
+
+i= 1
+while(as.numeric(names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i])) != 1){
+  phases[i] <- as.numeric(names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i]))
+  i = i+1
+}
+row.names(hz_mean) <- jd + 365 
+while(as.numeric(names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i])) == 366){
+  phases[i] <- as.numeric(names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i]))
+  i = i+1
+}
+while(as.numeric(names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i])) != 366){
+  phases[i] <- as.numeric(names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i]))
+  i = i+1
+}
+row.names(hz_mean) <- as.numeric(row.names(hz_mean)) + 365 
+while(as.numeric(names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i])) == 731){
+  phases[i] <- as.numeric(names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i]))
+  i = i+1
+}
+while(as.numeric(names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i])) != 731){
+  phases[i] <- as.numeric(names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i]))
+  i = i+1
+}
+row.names(hz_mean) <- as.numeric(row.names(hz_mean)) + 365 
+while(as.numeric(names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i])) == 1096){
+  phases[i] <- as.numeric(names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i]))
+  i = i+1
+}
+while(as.numeric(names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i])) < 1096){
+  phases[i] <- as.numeric(names(hz_mean[hz_mean[,i] == max(hz_mean[,i]),i]))
+  i = i+1
+}
+
+
