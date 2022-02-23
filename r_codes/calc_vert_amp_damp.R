@@ -38,6 +38,10 @@ lubridays <- ymd_hms("2021-01-01 00:00:00") + (outtimes$V1[seq(1,by = 23, length
 # x-values (should be the same for all models)
 x_vals <- k400_1.0_riveronly_s[,1,1,"X"]
 z_vals_0.5 <- k400_0.5_riveronly_s[1,1,,"Z"]
+z_vals_1.0 <- k400_1.0_riveronly_s[1,1,,"Z"]
+z_vals_2.0 <- k400_2.0_riveronly_s[1,1,,"Z"]
+z_vals_3.0 <- k400_3.0_riveronly_s[1,1,,"Z"]
+
 
 jd <- c(1,16,31,46,61,76,91,106,121,136,151,166,181,196,211,226,
         241,256,271,286,301,316,331,346)
@@ -56,3 +60,73 @@ calc_vert_amps <- function(x){
   }
   return(amps)
 }
+
+
+dim(k100_0.5_shady)
+
+t = seq(1,24,2)
+c = hcl.colors(12, "Fall")
+## --- k100 --- ##
+plot(k100_0.5_shady[,1,1], rev(z_vals_0.5), type = "l", xlim = c(-1,27))
+for(i in 1:12){
+  mapply(function(x) lines(k100_0.5_shady[,x,t[i]], rev(z_vals_0.5), col = c[i]),
+         x = c(2:413))
+}
+
+plot(k100_0.5_sunny[,1,1], rev(z_vals_0.5), type = "l", xlim = c(-1,27))
+for(i in 1:12){
+  mapply(function(x) lines(k100_0.5_sunny[,x,t[i]], rev(z_vals_0.5), col = c[i]),
+         x = c(2:413))
+}       
+
+
+
+## --- k400 --- ##
+par(mfcol = c(2,4), mar = c(2,2,0,0))
+plot(k400_0.5_shady[,1,1], rev(z_vals_0.5), type = "l", xlim = c(-1,27))
+for(i in 1:12){
+  mapply(function(x) lines(k400_0.5_shady[,x,t[i]], rev(z_vals_0.5), col = c[i]),
+         x = c(2:413))
+}
+
+plot(k400_0.5_sunny[,1,1], rev(z_vals_0.5), type = "l", xlim = c(-1,27))
+for(i in 1:12){
+  mapply(function(x) lines(k400_0.5_sunny[,x,t[i]], rev(z_vals_0.5), col = c[i]),
+         x = c(2:413))
+}  
+
+plot(k400_1.0_shady[,1,1], rev(z_vals_1.0), type = "l", xlim = c(-1,27))
+for(i in 1:12){
+  mapply(function(x) lines(k400_1.0_shady[,x,t[i]], rev(z_vals_1.0), col = c[i]),
+         x = c(2:413))
+}
+
+plot(k400_1.0_sunny[,1,1], rev(z_vals_1.0), type = "l", xlim = c(-1,27))
+for(i in 1:12){
+  mapply(function(x) lines(k400_1.0_sunny[,x,t[i]], rev(z_vals_1.0), col = c[i]),
+         x = c(2:413))
+}  
+
+plot(k400_2.0_shady[,1,1], rev(z_vals_2.0), type = "l", xlim = c(-1,27))
+for(i in 1:12){
+  mapply(function(x) lines(k400_2.0_shady[,x,t[i]], rev(z_vals_2.0), col = c[i]),
+         x = c(2:413))
+}
+
+plot(k400_2.0_sunny[,1,1], rev(z_vals_2.0), type = "l", xlim = c(-1,27))
+for(i in 1:12){
+  mapply(function(x) lines(k400_2.0_sunny[,x,t[i]], rev(z_vals_2.0), col = c[i]),
+         x = c(2:413))
+}  
+
+plot(k400_3.0_shady[,1,1], rev(z_vals_3.0), type = "l", xlim = c(-1,27))
+for(i in 1:12){
+  mapply(function(x) lines(k400_3.0_shady[,x,t[i]], rev(z_vals_3.0), col = c[i]),
+         x = c(2:413))
+}
+
+plot(k400_3.0_sunny[,1,1], rev(z_vals_3.0), type = "l", xlim = c(-1,27))
+for(i in 1:12){
+  mapply(function(x) lines(k400_3.0_sunny[,x,t[i]], rev(z_vals_3.0), col = c[i]),
+         x = c(2:413))
+}  
