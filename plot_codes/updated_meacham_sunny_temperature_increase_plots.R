@@ -9,7 +9,7 @@ library(HGSReader)
 library(lubridate)
 
 ####------ READ IN ALL DATA ------####
-box_directory <- "C:/Users/skati/Box/Floodplain_Shade_Box/meacham_updated_results/"
+box_directory <- "C:/Users/skati/OneDrive - Montana State University/BoxMigratedData/Floodplain_Shade_Box/meacham_updated_results/"
 
 kvals <- rep(c("100", "400"), each = 12)
 bcvals <- rep(rep(c("sunny", "shady", "riveronly"), each = 4), times = 2)
@@ -40,7 +40,7 @@ days <- ymd_hms("2021-01-01 00:00:00") + (outtimes$V1[seq(1,by = 23, length.out 
 model_100_1.0_xvals <- k100_1.0_sunny_s[,2,1,"X"]
 model_400_1.0_xvals <- k400_1.0_sunny_s[,2,1,"X"]
 model_1.0_zvals <- k100_1.0_shady_s[1,2,,"Z"]
-aquifer_z_idx <- 17:47
+aquifer_z_idx <- 18:47
 
 
 # flow path lengths: 1, 2, 3, 4, 10.9, 50.9, 100.9, 200.9, 300.9, 600.9, 901
@@ -77,7 +77,7 @@ listofSunny <- list(k100_0.5_sunny, k100_1.0_sunny, k100_2.0_sunny, k100_3.0_sun
 listofShady <- list(k100_0.5_shady, k100_1.0_shady, k100_2.0_shady, k100_3.0_shady,
                     k400_0.5_shady, k400_1.0_shady, k400_2.0_shady, k400_3.0_shady)
 
-
+time_idx <- c(2,7,12,17,22)
 
 ## Temperature differences across all flow paths ##
 tempdiffsplot <- function(sunnyModel, shadyModel, k, depth2HZ, yl = c(0,2.65), colorpal = hcl.colors(5), ...){
@@ -100,7 +100,7 @@ tempdiffsplot <- function(sunnyModel, shadyModel, k, depth2HZ, yl = c(0,2.65), c
   mapply(function(t, c) lines(colMeans(sunnyModel[reverseindex[aquifer_z_idx],,t]) - colMeans(shadyModel[reverseindex[aquifer_z_idx],,t]) ~ structure2use, 
                               col = c,
                               ...),
-         c(1,3,5,7,9,11,13,15,17,19,21,23),
+         time_idx,
          colorpal)
   abline(h =0, col = "black", lty = 2, lwd = 2)
   # mapply(function(t, c, xadj) text(structure2use[textAtX] + xadj, 
@@ -140,12 +140,12 @@ mapply(savetempdiffplots,
        modelNames2,
        listofSunny,
        listofShady,
-       MoreArgs = list(lwd = 4, yl = c(-3,8), colorpal = hcl.colors(12, "Fall")))
+       MoreArgs = list(lwd = 4, yl = c(-3,8), colorpal = hcl.colors(5, "Fall")))
 
 
 ### All on one ###
 
-png(paste0(getwd(),"/plots/all_sunny_temp_increases.png"),
+png(paste0(getwd(),"/plots/all_sunny_temp_increases_3.png"),
     height = 600*5,
     width = 1500*5,
     res = 72*5)
@@ -159,7 +159,7 @@ mapply(tempdiffsplot,
        listofShady,
        kNames2,
        modelNames2,
-       MoreArgs = list(lwd = 4, yl = c(-3,8), colorpal = hcl.colors(12, "Fall")))
+       MoreArgs = list(lwd = 4, yl = c(-3,8), colorpal = hcl.colors(5, "Zissou 1")))
 dev.off()
 
 

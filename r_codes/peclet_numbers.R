@@ -42,4 +42,9 @@ mu_100 = mean(v_100[,,45,,"Vx"])
 (rho_w*c_w*(mu_400*p)*L)/k
 (rho_w*c_w*(mu_100*p)*L)/k
 
+### Faulkner et al 2020 uses terminal distance of the pathline as the characterisitc length!
+L = 599
+(mu_400*L)/alpha
+
+
 

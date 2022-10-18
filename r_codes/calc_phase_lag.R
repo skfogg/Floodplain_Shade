@@ -4,7 +4,7 @@
 library(lubridate)
 
 ####------ READ IN ALL DATA ------####
-box_directory <- "C:/Users/skati/Box/Floodplain_Shade_Box/meacham_updated_results/"
+box_directory <- "C:/Users/skati/OneDrive - Montana State University/BoxMigratedData/Floodplain_Shade_Box/meacham_updated_results/"
 
 kvals <- rep(c("100", "400"), each = 12)
 bcvals <- rep(rep(c("sunny", "shady", "riveronly"), each = 4), times = 2)
@@ -44,10 +44,25 @@ jd <- c(1,16,31,46,61,76,91,106,121,136,151,166,181,196,211,226,
         241,256,271,286,301,316,331,346)
 
 calc_phase <- function(x){
+  if(dim(x)[1] == 52){
+    HZ_idx <- 6:35
+  }
+  if(dim(x)[1] == 57){
+    HZ_idx <- 11:40
+  }
+  if(dim(x)[1] == 67){
+    HZ_idx <- 21:50
+  }
+  if(dim(x)[1] == 77){
+    HZ_idx <- 31:60
+  }
+  
+  ## Calculate mean HZ temp at each time step to get 1 averaged annual signal
   hz_mean <- matrix(data = 0, nrow = 24, ncol = 413)
   for(i in 1:413){
-    hz_mean[,i] <- colMeans(x[1:40, i, ])
+    hz_mean[,i] <- colMeans(x[HZ_idx, i, ])
   }
+  
   row.names(hz_mean) <- jd
   phases <- length(413)
   for(i in 1:413){
@@ -76,20 +91,27 @@ k400_1.0_sunny_phase <- calc_phase(k400_1.0_sunny)
 k400_2.0_sunny_phase <- calc_phase(k400_2.0_sunny)
 k400_3.0_sunny_phase <- calc_phase(k400_3.0_sunny)
 
-cols4 <- hcl.colors(4)
+cols4 <- hcl.colors(5, "BrwnYl", rev = T)[2:5]
+lw <- 3
 
 # k 100
 par(mfrow = c(2,1), mar = c(2,2,1,1))
-plot(k100_0.5_shady_phase ~ x_vals, type = "l", col = cols4[1], lwd = 2, ylim = c(200,360)) 
-lines(k100_1.0_shady_phase ~ x_vals, col = cols4[2], lwd = 2)
-lines(k100_2.0_shady_phase ~ x_vals, col = cols4[3], lwd = 2)
-lines(k100_3.0_shady_phase ~ x_vals, col = cols4[4], lwd = 2)
+plot(I(k100_0.5_shady_phase-k100_0.5_shady_phase[1]) ~ x_vals, type = "l", 
+     col = cols4[1], 
+     lwd = 2, 
+     ylim = c(0,100)) 
+lines(I(k100_1.0_shady_phase-k100_1.0_shady_phase[1]) ~ x_vals, col = cols4[2], lwd = 2)
+lines(I(k100_2.0_shady_phase-k100_2.0_shady_phase[1]) ~ x_vals, col = cols4[3], lwd = 2)
+lines(I(k100_3.0_shady_phase-k100_3.0_shady_phase[1]) ~ x_vals, col = cols4[4], lwd = 2)
 legend("topright", c("0.5", "1.0", "2.0", "3.0"), lwd = 2, col = cols4[1:4])
 
-plot(k100_0.5_sunny_phase ~ x_vals, type = "l", col = cols4[1], lwd = 2, ylim = c(200,360)) 
-lines(k100_1.0_sunny_phase ~ x_vals, col = cols4[2], lwd = 2)
-lines(k100_2.0_sunny_phase ~ x_vals, col = cols4[3], lwd = 2)
-lines(k100_3.0_sunny_phase ~ x_vals, col = cols4[4], lwd = 2)
+plot(I(k400_0.5_shady_phase-k400_0.5_shady_phase[1]) ~ x_vals, type = "l", 
+     col = cols4[1], 
+     lwd = 2, 
+     ylim = c(0,100)) 
+lines(I(k400_1.0_shady_phase-k400_1.0_shady_phase[1]) ~ x_vals, col = cols4[2], lwd = 2)
+lines(I(k400_2.0_shady_phase-k400_2.0_shady_phase[1]) ~ x_vals, col = cols4[3], lwd = 2)
+lines(I(k400_3.0_shady_phase-k400_3.0_shady_phase[1]) ~ x_vals, col = cols4[4], lwd = 2)
 legend("topright", c("0.5", "1.0", "2.0", "3.0"), lwd = 2, col = cols4[1:4])
 
 ## k 400

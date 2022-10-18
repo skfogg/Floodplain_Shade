@@ -2,8 +2,11 @@
 ## Vertical amplitude damping
 ##
 
+library(lubridate)
+
 ####------ READ IN ALL DATA ------####
-box_directory <- "C:/Users/skati/Box/Floodplain_Shade_Box/meacham_updated_results/"
+box_directory <- "C:/Users/skati/OneDrive - Montana State University/BoxMigratedData/Floodplain_Shade_Box/meacham_updated_results/"
+  #"C:/Users/skati/Box/Floodplain_Shade_Box/meacham_updated_results/"
 
 kvals <- rep(c("100", "400"), each = 12)
 bcvals <- rep(rep(c("sunny", "shady", "riveronly"), each = 4), times = 2)
@@ -32,7 +35,7 @@ listofRiverOnly <- list(k100_0.5_riveronly, k100_1.0_riveronly, k100_2.0_riveron
                         k400_0.5_riveronly, k400_1.0_riveronly, k400_2.0_riveronly, k400_3.0_riveronly) 
 
 ### ---- Time Data --- ###
-outtimes <- read.table("C:/Users/skati/Box/HGSwork/outputTimes_inputTemps/OutputTimesYr7_fulldays.txt")
+outtimes <- read.table("C:/Users/skati/OneDrive - Montana State University/BoxMigratedData/HGSwork/outputTimes_inputTemps/OutputTimesYr7_fulldays.txt")
 lubridays <- ymd_hms("2021-01-01 00:00:00") + (outtimes$V1[seq(1,by = 23, length.out = 24)]-(365*86400*7))
 
 # x-values (should be the same for all models)
@@ -79,7 +82,17 @@ for(i in 1:12){
          x = c(2:413))
 }       
 
+plot(k100_0.5_shady[,1,1], rev(z_vals_0.5), type = "n", xlim = c(-1,27))
+for(i in 1:12){
+  mapply(function(x) lines(k100_0.5_shady[,x,t[i]], rev(z_vals_0.5), col = c[i]),
+         x = c(41))
+}
 
+plot(k100_0.5_sunny[,1,1], rev(z_vals_0.5), type = "n", xlim = c(-1,27))
+for(i in 1:12){
+  mapply(function(x) lines(k100_0.5_sunny[,x,t[i]], rev(z_vals_0.5), col = c[i]),
+         x = c(41))
+}   
 
 ## --- k400 --- ##
 par(mfcol = c(2,4), mar = c(2,2,0,0))
@@ -130,3 +143,40 @@ for(i in 1:12){
   mapply(function(x) lines(k400_3.0_sunny[,x,t[i]], rev(z_vals_3.0), col = c[i]),
          x = c(2:413))
 }  
+
+
+
+#-- Zoom in 
+par(mfrow =c(1,1))
+plot(k100_3.0_shady[,1,1], rev(z_vals_3.0), type = "l", ylim = c(45,51), xlim = c(-1,27))
+for(i in 1:1){
+  mapply(function(x) lines(k400_3.0_shady[,x,t[i]], rev(z_vals_3.0), col = c[i]),
+         x = c(2:413))
+}     
+
+image(x = 1:414,
+      y = 1:78,
+      z = t(k400_3.0_shady[,,1]))
+plot3D::scatter3D(x = 1:414,
+      y = 1:78,
+      z = t(k400_3.0_shady[,,1]))
+
+library(plot3D)
+
+orderedT <- c(k400_3.0_shady[1,,2], k400_3.0_shady[2,,2])
+for(i in 3:77){
+  orderedT <- c(orderedT, k400_3.0_shady[i,,2])
+}
+
+scatter3D(x = rep(k400_3.0_shady_s[,1,1,"X"], times = 77),
+          y = rep(k400_3.0_shady_s[1,1,,"Z"], each = 413),
+          z = orderedT,
+          colvar = orderedT,
+          theta = 0,
+          phi = 80,
+          type = "h")
+
+k100_3.0_shady[,1,1]
+
+
+

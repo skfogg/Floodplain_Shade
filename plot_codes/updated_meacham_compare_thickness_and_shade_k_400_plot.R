@@ -6,7 +6,7 @@
 library(HGSReader)
 library(lubridate)
 
-box_directory <- "C:/Users/skati/Box/Floodplain_Shade_Box/meacham_updated_results/"
+box_directory <- "C:/Users/skati/OneDrive - Montana State University/BoxMigratedData/Floodplain_Shade_Box/meacham_updated_results/"
 
 kvals <- rep(c("100", "400"), each = 12)
 bcvals <- rep(rep(c("sunny", "shady", "riveronly"), each = 4), times = 2)
@@ -62,24 +62,25 @@ par(mfcol = c(4,2),
 
 
 thickness <- c("Soil 0.5m", "Soil 1.0m", "Soil 2.0m", "Soil 3.0m")
-time_idx <- c(1,3,5,7,9,11,13,15,17,19,21,23)
+time_idx <- c(2,7,12,17,22)
+#c(1,3,5,7,9,11,13,15,17,19,21,23)
 plotacrosstime <- function(x, temp, modelrun) {
   plot(x[x_idx,2,30,"X"], 
        colMeans(temp[aquifer_z_idx,x_idx,time_idx[1]]),
        type = "l",
        col = plotcols[1],
-       ylim = c(3,19),
+       ylim = c(3,20),
        lwd = plotlwd,
        ylab = expression(paste("Temperature (", degree, "C)")),
        xlab = "Flow Path Length (m)",
        main = modelrun)
   mapply(function(t,c) lines(x[x_idx,2,30,"X"], colMeans(temp[aquifer_z_idx,x_idx,t]), col = c, lwd = plotlwd),
          time_idx,
-         hcl.colors(12,"Fall"))
+         hcl.colors(length(time_idx),"Zissou 1"))
 }
 
 
-png("plots/compare_thickness_and_shade_k_400.png",
+png("plots/compare_thickness_and_shade_k_400_2.png",
     height = 1000*5,
     width = 900*5,
     res = 72*5)

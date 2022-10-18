@@ -6,7 +6,7 @@
 library(HGSReader)
 library(lubridate)
 
-box_directory <- "C:/Users/skati/Box/Floodplain_Shade_Box/meacham_updated_results/"
+box_directory <- "C:/Users/skati/OneDrive - Montana State University/BoxMigratedData/Floodplain_Shade_Box/meacham_updated_results/"
 
 kvals <- rep(c("100", "400"), each = 12)
 bcvals <- rep(rep(c("sunny", "shady", "riveronly"), each = 4), times = 2)
@@ -50,7 +50,7 @@ plotcols <- hcl.colors(5, "Oranges", rev = F)
 #plotcols <- plotcols[2:5] #when rev = T
 plotcols <- plotcols[1:4] # when rev = F
 plotlwd <- 3
-time_idx <- c(2,8,14,20)
+# time_idx <- c(2,8,14,20)
 x_idx <- 1:413
 
 originalpar <- par()
@@ -61,13 +61,15 @@ par(mfcol = c(4,2),
 
 
 thickness <- c("Soil 0.5m", "Soil 1.0m", "Soil 2.0m", "Soil 3.0m")
-time_idx <- c(1,3,5,7,9,11,13,15,17,19,21,23)
+time_idx <- c(2,7,12,17,22)
+  #c(1,3,5,7,9,11,13,15,17,19,21,23)
+
 plotacrosstime <- function(x, temp, modelrun) {
   plot(x[x_idx,2,30,"X"], 
        colMeans(temp[aquifer_z_idx,x_idx,time_idx[1]]),
        type = "l",
        col = plotcols[1],
-       ylim = c(3,19),
+       ylim = c(3,20),
        lwd = plotlwd,
        ylab = expression(paste("Temperature (", degree, "C)")),
        xlab = "Flow Path Length (m)",
@@ -75,7 +77,8 @@ plotacrosstime <- function(x, temp, modelrun) {
        xlim = c(0,2000))
   mapply(function(t,c) lines(x[x_idx,2,30,"X"], colMeans(temp[aquifer_z_idx,x_idx,t]), col = c, lwd = plotlwd),
          time_idx,
-         hcl.colors(12,"Fall"))
+         hcl.colors(length(time_idx),"Zissou 1")
+         )
 }
 
 
@@ -91,7 +94,7 @@ plotacrosstime <- function(x, temp, modelrun) {
 #     cex.axis = 1.5)
 
 
-png("plots/compare_thickness_and_shade_k_100.png",
+png("plots/compare_thickness_and_shade_k_100_2.png",
     height = 1000*5,
     width = 900*5,
     res = 72*5)
@@ -137,22 +140,22 @@ mapply(plotacrosstime,
 ## Legend ##
 ############
 par(originalpar)
-png("plots/compare_thickness_and_shade_legend.png",
+png("plots/compare_thickness_and_shade_legend_2.png",
     height = 230*5,
     width = 400*5,
     res = 72*5)
-plot(rep(5, times = 12), 
-     0:11, 
+plot(rep(5, times = length(time_idx)), 
+     0:(length(time_idx)-1), 
      bty = "n",
-     col = hcl.colors(12,"Fall", rev = T),
+     col = hcl.colors(length(time_idx),"Zissou 1", rev = T),
      pch = 175,
      cex = 5,
      xaxt = "n",
      yaxt = "n",
      ylab = "",
      xlab = "")
-text(rep(4.72, times = 6), seq(11.1, 0.1, by = -2), 
-     c("Jan", "Mar", "May", "Jul", "Sep", "Nov"), 
+text(rep(4.72, times = 5), seq(4.0, 0, by = -1), 
+     c("Jan", "Apr", "Jun", "Aug", "Nov"), 
      cex = 0.65,
      adj = 1)
 mtext("Month", side = 3, line = 0)
