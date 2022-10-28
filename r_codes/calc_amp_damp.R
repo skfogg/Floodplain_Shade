@@ -269,7 +269,7 @@ lines(I(k100_1.0_sunny_amps/k100_1.0_sunny_amps[1]) ~ x_vals, col = cols4[2], lw
 lines(I(k100_2.0_sunny_amps/k100_2.0_sunny_amps[1]) ~ x_vals, col = cols4[3], lwd = lw)
 lines(I(k100_3.0_sunny_amps/k100_3.0_sunny_amps[1]) ~ x_vals, col = cols4[4], lwd = lw)
 
-mtext(expression(paste("Annual Temperature Amplitude ( ", degree, "C)")), side = 2, 
+mtext("Amplitude Ratio", side = 2, 
       line = 1, outer = T, cex = 1.4)
 mtext("Flow Path Length (m)", side = 1, line = 1, outer = T, cex = 1.4)
 dev.off()
@@ -298,7 +298,7 @@ lines(I(k400_1.0_sunny_amps/k400_1.0_sunny_amps[1]) ~ x_vals, col = cols4[2], lw
 lines(I(k400_2.0_sunny_amps/k400_2.0_sunny_amps[1]) ~ x_vals, col = cols4[3], lwd = lw)
 lines(I(k400_3.0_sunny_amps/k400_3.0_sunny_amps[1]) ~ x_vals, col = cols4[4], lwd = lw)
 
-mtext(expression(paste("Annual Temperature Amplitude ( ", degree, "C)")), side = 2, 
+mtext("Amplitude Ratio", side = 2, 
       line = 1, outer = T, cex = 1.4)
 mtext("Flow Path Length (m)", side = 1, line = 1, outer = T, cex = 1.4)
 dev.off()

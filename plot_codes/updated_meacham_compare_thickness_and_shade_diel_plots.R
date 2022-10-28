@@ -57,7 +57,7 @@ day_starts <- seq(1,by = 24, length.out = 24)
 day_ends <- seq(24, by = 24, length.out = 24)
 
 x_idx = 1:95
-time_idx <- c(1,5,9,13,17,21)+1
+time_idx <- c(1,5,9,13,17,21)
 day_starts_2 <- seq(1,by = 24, length.out = 24)[time_idx]
 day_ends_2 <- seq(24, by = 24, length.out = 24)[time_idx]
 hours_idx <- seq(0, 23, by = 4)+1
@@ -66,22 +66,26 @@ aquifer_z_idx <- 18:47
 daily_time_idx <- rep(day_starts_2, each = 6) + rep(hours_idx, times = 6) 
 
 daily_time_idx <- daytimesvector
+plotlwd <- 3
+
+x = k400_0.5_riveronly_100m
+modelrun = thickness[1]
 
 plotacrosstime_daily <- function(x, modelrun) {
   plot(x[x_idx,2,30,1,"X"], 
        rowMeans(x[x_idx,2,aquifer_z_idx, daily_time_idx[1], "temp"]),
        # colMeans(temp[aquifer_z_idx,x_idx,daily_time_idx[1]]),
        type = "l",
-       col = plotcols[1],
+       col = "white",
        ylim = c(0,22),
        lwd = plotlwd,
        ylab = expression(paste("Temperature (", degree, "C)")),
        xlab = "Flow Path Length (m)",
-       main = modelrun,
+       # main = modelrun,
        xlim = c(0,10))
   mapply(function(t,c) lines(x[x_idx,2,30,1,"X"], rowMeans(x[x_idx,2,aquifer_z_idx, t, "temp"]), col = c, lwd = plotlwd),
          daily_time_idx,
-         rep(hcl.colors(5,"Zissou 1"), each = 5)
+         rep(hcl.colors(24,"Fall")[t_idx], each = 5)
   )
 }
 
@@ -95,7 +99,7 @@ png("plots/compare_diel_thickness_and_shade_k_100.png",
     res = 72*5)
 par(mfcol = c(4,3),
     oma = c(4,4,4,0),
-    mar = c(2,2,3,1),
+    mar = c(2,2,2,1),
     cex.main = 2,
     cex.axis = 1.5)
 
@@ -119,10 +123,6 @@ mtext(expression(paste("Temperature (", degree, " C)")), side = 2,
 mtext("Flow Path Length (m)", side = 1, line = 2, outer = T,
       cex = 2)
 dev.off()
-
-
-
-
 
 #### --- K400 --- ####
 png("plots/compare_diel_thickness_and_shade_k_400.png",
@@ -156,7 +156,8 @@ mtext("Flow Path Length (m)", side = 1, line = 2, outer = T,
       cex = 2)
 dev.off()
 
-
+#################
+###################
 
 
 

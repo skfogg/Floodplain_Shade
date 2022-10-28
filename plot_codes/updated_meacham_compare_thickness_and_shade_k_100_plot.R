@@ -42,7 +42,7 @@ tempList_riverOnly <- list(k100_0.5_riveronly, k100_1.0_riveronly, k100_2.0_rive
 x_to_800_idx <- 1:445
 aquifer_z_idx <- 17:47
 
-localbox <- "C:/Users/skati/Box/"
+localbox <- "C:/Users/skati/OneDrive - Montana State University/BoxMigratedData/"
 outtimes <- read.table(paste0(localbox, "HGSwork/outputTimes_inputTemps/OutputTimesYr7_fulldays.txt"))
 days <- ymd_hms("2021-01-01 00:00:00") + (outtimes$V1[seq(1,by = 23, length.out = 24)]-(365*86400*7))
 
@@ -61,7 +61,12 @@ par(mfcol = c(4,2),
 
 
 thickness <- c("Soil 0.5m", "Soil 1.0m", "Soil 2.0m", "Soil 3.0m")
-time_idx <- c(2,7,12,17,22)
+time_idx <- c(1,3,5,7,9,11,13,15,17,19,21,23)
+  ## 6 MONTHS:
+  #c(1,5,9,13, 17, 21) + 1
+  ## FIVE MONTHS:
+  #c(2,7,12,17,22)
+  ## 12 MONTHS:
   #c(1,3,5,7,9,11,13,15,17,19,21,23)
 
 plotacrosstime <- function(x, temp, modelrun) {
@@ -73,36 +78,25 @@ plotacrosstime <- function(x, temp, modelrun) {
        lwd = plotlwd,
        ylab = expression(paste("Temperature (", degree, "C)")),
        xlab = "Flow Path Length (m)",
-       main = modelrun,
+       # main = modelrun,
        xlim = c(0,2000))
   mapply(function(t,c) lines(x[x_idx,2,30,"X"], colMeans(temp[aquifer_z_idx,x_idx,t]), col = c, lwd = plotlwd),
          time_idx,
-         hcl.colors(length(time_idx),"Zissou 1")
+         # hcl.colors(length(time_idx),"Fall")
+         hcl.colors(24, "Fall")[time_idx]
          )
+  abline(v = 1950, lty = 2)
 }
 
-
-## 2 column, no river control ##
-# png("plots/compare_thickness_and_shade_k_100.png",
-#     height = 1000*5,
-#     width = 600*5,
-#     res = 72*5)
-# par(mfcol = c(4,2),
-#     oma = c(4,4,4,0),
-#     mar = c(2,2,3,1),
-#     cex.main = 2,
-#     cex.axis = 1.5)
-
-
-png("plots/compare_thickness_and_shade_k_100_2.png",
+png("plots/compare_thickness_and_shade_k_100.png",
     height = 1000*5,
     width = 900*5,
     res = 72*5)
 par(mfcol = c(4,3),
     oma = c(4,4,4,0),
-    mar = c(2,2,3,1),
+    mar = c(2,2,2,1),
     cex.main = 2,
-    cex.axis = 1.5)
+    cex.axis = 1.8)
 
 ## RIVER ONLY ##
 mapply(plotacrosstime,
@@ -140,22 +134,22 @@ mapply(plotacrosstime,
 ## Legend ##
 ############
 par(originalpar)
-png("plots/compare_thickness_and_shade_legend_2.png",
+png("plots/compare_thickness_and_shade_legend.png",
     height = 230*5,
     width = 400*5,
     res = 72*5)
 plot(rep(5, times = length(time_idx)), 
      0:(length(time_idx)-1), 
      bty = "n",
-     col = hcl.colors(length(time_idx),"Zissou 1", rev = T),
+     col = hcl.colors(24,"Fall", rev = T)[time_idx],
      pch = 175,
      cex = 5,
      xaxt = "n",
      yaxt = "n",
      ylab = "",
      xlab = "")
-text(rep(4.72, times = 5), seq(4.0, 0, by = -1), 
-     c("Jan", "Apr", "Jun", "Aug", "Nov"), 
+text(rep(4.72, times = 6), seq(11.0, 0, by = -2), 
+     c("Jan", "Mar", "May", "Jul", "Sep", "Nov"), 
      cex = 0.65,
      adj = 1)
 mtext("Month", side = 3, line = 0)

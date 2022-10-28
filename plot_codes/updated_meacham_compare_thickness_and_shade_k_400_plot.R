@@ -37,7 +37,7 @@ structureList <- list(structure_0.5, structure_1.0, structure_2.0, structure_3.0
 
 tempList_shady <- list(k400_0.5_shady, k400_1.0_shady, k400_2.0_shady, k400_3.0_shady)
 tempList_sunny <- list(k400_0.5_sunny, k400_1.0_sunny, k400_2.0_sunny, k400_3.0_sunny)
-tempList_riveronly <- list(k400_0.5_riveronly, k400_1.0_riveronly, k400_2.0_riveronly, k400_3.0_riveronly)
+tempList_riverOnly <- list(k400_0.5_riveronly, k400_1.0_riveronly, k400_2.0_riveronly, k400_3.0_riveronly)
 
 
 x_to_800_idx <- 1:445
@@ -62,8 +62,14 @@ par(mfcol = c(4,2),
 
 
 thickness <- c("Soil 0.5m", "Soil 1.0m", "Soil 2.0m", "Soil 3.0m")
-time_idx <- c(2,7,12,17,22)
+time_idx <- c(1,3,5,7,9,11,13,15,17,19,21,23)
+## 6 MONTHS:
+#c(1,5,9,13, 17, 21) + 1
+## FIVE MONTHS:
+#c(2,7,12,17,22)
+## 12 MONTHS:
 #c(1,3,5,7,9,11,13,15,17,19,21,23)
+
 plotacrosstime <- function(x, temp, modelrun) {
   plot(x[x_idx,2,30,"X"], 
        colMeans(temp[aquifer_z_idx,x_idx,time_idx[1]]),
@@ -73,29 +79,31 @@ plotacrosstime <- function(x, temp, modelrun) {
        lwd = plotlwd,
        ylab = expression(paste("Temperature (", degree, "C)")),
        xlab = "Flow Path Length (m)",
-       main = modelrun)
+       # main = modelrun,
+       xlim = c(0,2000))
   mapply(function(t,c) lines(x[x_idx,2,30,"X"], colMeans(temp[aquifer_z_idx,x_idx,t]), col = c, lwd = plotlwd),
          time_idx,
-         hcl.colors(length(time_idx),"Zissou 1"))
+         # hcl.colors(length(time_idx),"Fall")
+         hcl.colors(24, "Fall")[time_idx]
+  )
+  abline(v = 1950, lty = 2)
 }
 
-
-png("plots/compare_thickness_and_shade_k_400_2.png",
+png("plots/compare_thickness_and_shade_k_400.png",
     height = 1000*5,
     width = 900*5,
     res = 72*5)
 par(mfcol = c(4,3),
     oma = c(4,4,4,0),
-    mar = c(2,2,3,1),
+    mar = c(2,2,2,1),
     cex.main = 2,
-    cex.axis = 1.5)
+    cex.axis = 1.8)
 
 ## RIVER ONLY ##
 mapply(plotacrosstime,
        structureList,
-       tempList_riveronly,
+       tempList_riverOnly,
        thickness)
-
 ## SHADY ##
 mapply(plotacrosstime,
        structureList,
