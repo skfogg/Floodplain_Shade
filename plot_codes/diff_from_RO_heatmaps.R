@@ -117,17 +117,18 @@ allShadyVD <- cbind(shady_vd_100, shady_vd_400)
 allSunnyVD <- cbind(sunny_vd_100, sunny_vd_400)
 
 
-png("plots/diff_from_RO_heatmaps_k100_shady.png", width = 600*5, 
-    height = 1000*5, res = 72*5)
+png("plots/diff_from_RO_heatmaps_k100_shady.png", 
+    width = 800*5, 
+    height = 1200*5, res = 72*5)
 par(mfrow = c(4,1),
     mar = c(3,3,1,3),
     cex.axis = 1.5)
 for(i in 1:4){
   plot(shadeDiffRasters[[i]],
        asp = 0, 
-       col = c(hcl.colors(10, "Oranges", rev = F)[1:9], "white", hcl.colors(8, "Purples", rev = T)[2:8]),
-       breaks = c(seq(-14, -0.5, by = 1.5), seq(0.5, 9.5, by = 1.5)),#seq(-15.5, 12.5, by = 1),
-       xlim = c(0,420),
+       col = hcl.colors(35, "Purple-Brown", rev= T)[2:35],
+       breaks = seq(-16.5, 16.5, by = 1),
+       # xlim = c(0,400),
        yaxt = "n")
   abline(h = seq(2.5,24.5, by = 2))
   axis(2, at = seq(1.5,24,by = 2),
@@ -138,17 +139,18 @@ for(i in 1:4){
 }
 dev.off()
 
-png("plots/diff_from_RO_heatmaps_k400_shady.png", width = 600*5, 
-    height = 1000*5, res = 72*5)
+png("plots/diff_from_RO_heatmaps_k400_shady.png", 
+    width = 800*5, 
+    height = 1200*5, res = 72*5)
 par(mfrow = c(4,1),
     mar = c(3,3,1,3),
     cex.axis = 1.5)
 for(i in 5:8){
   plot(shadeDiffRasters[[i]],
        asp = 0, 
-       col = c(hcl.colors(10, "Oranges", rev = F)[1:9], "white", hcl.colors(8, "Purples", rev = T)[2:8]),
-       breaks = c(seq(-14, -0.5, by = 1.5), seq(0.5, 9.5, by = 1.5)),#seq(-15.5, 12.5, by = 1),
-       xlim = c(0,420),
+       col = hcl.colors(35, "Purple-Brown", rev= T)[2:35],
+       breaks = seq(-16.5, 16.5, by = 1),
+       # xlim = c(0,400),
        yaxt = "n")
   abline(h = seq(2.5,24.5, by = 2))
   axis(2, at = seq(1.5,24,by = 2),
@@ -159,17 +161,18 @@ for(i in 5:8){
 }
 dev.off()
 
-png("plots/diff_from_RO_heatmaps_k100_sunny.png", width = 600*5, 
-    height = 1000*5, res = 72*5)
+png("plots/diff_from_RO_heatmaps_k100_sunny.png", 
+    width = 800*5, 
+    height = 1200*5, res = 72*5)
 par(mfrow = c(4,1),
     mar = c(3,3,1,3),
     cex.axis = 1.5)
 for(i in 1:4){
   plot(sunnyDiffRasters[[i]],
        asp = 0, 
-       col = c(hcl.colors(10, "Oranges", rev = F)[1:9], "white", hcl.colors(8, "Purples", rev = T)[2:8]),
-       breaks = c(seq(-14, -0.5, by = 1.5), seq(0.5, 9.5, by = 1.5)),#seq(-15.5, 12.5, by = 1),
-       xlim = c(0,420),
+       col = hcl.colors(35, "Purple-Brown", rev= T)[2:35],
+       breaks = seq(-16.5, 16.5, by = 1),
+       # xlim = c(0,400),
        yaxt = "n")
   abline(h = seq(2.5,24.5, by = 2))
   axis(2, at = seq(1.5,24,by = 2),
@@ -179,17 +182,19 @@ for(i in 1:4){
 }
 dev.off()
 
-png("plots/diff_from_RO_heatmaps_k400_sunny.png", width = 600*5, 
-    height = 1000*5, res = 72*5)
+png("plots/diff_from_RO_heatmaps_k400_sunny.png", 
+    width = 800*5, 
+    height = 1200*5, res = 72*5)
 par(mfrow = c(4,1),
     mar = c(3,3,1,3),
     cex.axis = 1.5)
 for(i in 5:8){
   plot(sunnyDiffRasters[[i]],
        asp = 0, 
-       col = c(hcl.colors(10, "Oranges", rev = F)[1:9], "white", hcl.colors(8, "Purples", rev = T)[2:8]),
-       breaks = c(seq(-14, -0.5, by = 1.5), seq(0.5, 9.5, by = 1.5)),#seq(-15.5, 12.5, by = 1),
-       xlim = c(0,420),
+       # col = c(hcl.colors(10, "Oranges", rev = F)[1:9], "white", hcl.colors(8, "Purples", rev = T)[2:8]),
+       col = hcl.colors(35, "Purple-Brown", rev= T)[2:35],
+       breaks = seq(-16.5, 16.5, by = 1),
+       # xlim = c(0,400),
        yaxt = "n")
   abline(h = seq(2.5,24.5, by = 2))
   axis(2, at = seq(1.5,24,by = 2),
@@ -200,36 +205,43 @@ for(i in 5:8){
 dev.off()
 
 
+#### MAKE AN ACCURATE LEGEND ####
+fullrange <- hcl.colors(35, "Purple-Brown", rev= T)[2:35]
 
-plot(r, asp = 0, col = hcl.colors(15, "RdBu"),
-     breaks = c(-8, -7,-6,-5,-4,-3,-2,-1, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0))
-plot(r, asp = 0, col = hcl.colors(15, "RdBu"),
-     breaks = c(-8, -7,-6,-5,-4,-3,-2,-1, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0),
-     xlim = c(0,200))
-plot(r, asp = 0, 
-     col = hcl.colors(17, "RdBu"),
-     breaks = c(-8, -7,-6,-5,-4,-3,-2,-1, -0.5, 0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0),
-     xlim = c(0,200))
-c <- rasterToContour(r, levels = c(-0.5, 0.5))
-plot(c, add = T)
+png("plots/diff_RO_legend.png",
+    height = 500*5,
+    width = 600*5,
+    res = 72*5)
+par(mar= c(1,1,1,1),
+    ljoin = 1,
+    lend = 2)
+plot(rep(5, times = 27), 
+     seq(-15.5, 10.5, by = 1),
+     bty = "n",
+     xaxt = "n",
+     yaxt = "n",
+     type = "n")
+rect(xleft = rep(5, times = 27),
+     ybottom = seq(10.5, -15.5, by = -1)[1:27],
+     xright = rep(5.25, times = 27),
+     ytop = seq(10.5, -15.5, by = -1)[2:28],
+     col = fullrange[2:28],
+     border = NA)
+segments(x0 = rep(5.25, times = 27),
+         y0 = seq(-15.5, 10.5, by = 1),
+         x1 = rep(5.35, times = 27),
+         lwd = 2)
+rect(xleft = c(5),
+     ybottom = -15.5,
+     xright = 5.25,
+     ytop = 10.5,
+     lwd = 2)
+text(x = rep(5.35, times = 28),
+     y = seq(-15.5, 10.5, by = 2),
+     labels = seq(-10.5, 15.5, by = 2),
+     pos = 4,
+     cex = 1.8)
+dev.off()
 
-library(raster)
 
-coordies <- matrix(ncol = length(seq(0,2000, by = 0.1)),
-                   nrow = 24)
-raster(coordies)
-
-
-library(scatterplot3d)
-scatterplot3d(test$x, test$y, test$diffs,
-              angle = 80,
-              highlight.3d = T)
-
-library(rgl)
-library(car)
-scatter3d(diffs ~ x | y,
-          data = test,
-          subset = x < 101,
-          surface = F, xlim = c(0,100),
-          point.col = rep(hcl.colors(24), each = 95))
 

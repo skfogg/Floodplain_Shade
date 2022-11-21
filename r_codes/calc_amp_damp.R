@@ -304,3 +304,78 @@ mtext("Flow Path Length (m)", side = 1, line = 1, outer = T, cex = 1.4)
 dev.off()
 
 
+
+
+
+col2 <- hcl.colors(4, "YlOrRd")
+#### ---- K100: AMP RATIO By thickness ---- ####
+png("plots/annual_amp_ratio_k100_2.png", height = 900*5, width = 600*5, res = 72*5)
+par(mfrow = c(4,1), mar = c(2,2,1,1), oma = c(3,3,0,0),
+    cex.axis = 1.5)
+## -- 0.5 --##
+plot(I(k100_0.5_riveronly_amps/k100_0.5_riveronly_amps[1]) ~ x_vals, ylim =c(0,1.3), type = "l", 
+     col = "dodgerblue", lwd = lw) 
+lines(I(k100_0.5_shady_amps/k100_0.5_shady_amps[1]) ~ x_vals, col = col2[3], lwd = lw)
+lines(I(k100_0.5_sunny_amps/k100_0.5_sunny_amps[1]) ~ x_vals, col = col2[1], lwd = lw)
+
+## -- 1.0 -- ##
+plot(I(k100_1.0_riveronly_amps/k100_1.0_riveronly_amps[1]) ~ x_vals, ylim =c(0,1.3), type = "l", 
+     col = "dodgerblue", lwd = lw) 
+lines(I(k100_1.0_shady_amps/k100_1.0_shady_amps[1]) ~ x_vals, col = col2[3], lwd = lw)
+lines(I(k100_1.0_sunny_amps/k100_1.0_sunny_amps[1]) ~ x_vals, col = col2[1], lwd = lw)
+
+## -- 2.0 -- ##
+plot(I(k100_2.0_riveronly_amps/k100_2.0_riveronly_amps[1]) ~ x_vals, ylim =c(0,1.3), type = "l", 
+     col = "dodgerblue", lwd = lw) 
+lines(I(k100_2.0_shady_amps/k100_2.0_shady_amps[1]) ~ x_vals, col = col2[3], lwd = lw)
+lines(I(k100_2.0_sunny_amps/k100_2.0_sunny_amps[1]) ~ x_vals, col = col2[1], lwd = lw)
+legend("topright", c("river-only", "shady", "sunny"), lwd = lw, 
+       col = c("dodgerblue", col2[3], col2[1]) , cex = 1.4, title = "Scenario")
+
+## -- 3.0 -- ##
+plot(I(k100_3.0_riveronly_amps/k100_3.0_riveronly_amps[1]) ~ x_vals, ylim =c(0,1.3), type = "l", 
+     col = "dodgerblue", lwd = lw) 
+lines(I(k100_3.0_shady_amps/k100_3.0_shady_amps[1]) ~ x_vals, col = col2[3], lwd = lw)
+lines(I(k100_3.0_sunny_amps/k100_3.0_sunny_amps[1]) ~ x_vals, col = col2[1], lwd = lw)
+
+mtext("Amplitude Ratio", side = 2, 
+      line = 1, outer = T, cex = 1.4)
+mtext("Flow Path Length (m)", side = 1, line = 1, outer = T, cex = 1.4)
+dev.off()
+
+#### ---- K400: AMP RATIO By thickness ---- ####
+png("plots/annual_amp_ratio_k400_2.png", height = 900*5, width = 600*5, res = 72*5)
+par(mfrow = c(4,1), mar = c(2,2,1,1), oma = c(3,3,0,0),
+    cex.axis = 1.5)
+## -- 0.5 --##
+plot(I(k400_0.5_riveronly_amps/k400_0.5_riveronly_amps[1]) ~ x_vals, ylim =c(0,1.3), type = "l", 
+     col = "dodgerblue", lwd = lw) 
+lines(I(k400_0.5_shady_amps/k400_0.5_shady_amps[1]) ~ x_vals, col = col2[3], lwd = lw)
+lines(I(k400_0.5_sunny_amps/k400_0.5_sunny_amps[1]) ~ x_vals, col = col2[1], lwd = lw)
+
+## -- 1.0 -- ##
+plot(I(k400_1.0_riveronly_amps/k400_1.0_riveronly_amps[1]) ~ x_vals, ylim =c(0,1.3), type = "l", 
+     col = "dodgerblue", lwd = lw) 
+lines(I(k400_1.0_shady_amps/k400_1.0_shady_amps[1]) ~ x_vals, col = col2[3], lwd = lw)
+lines(I(k400_1.0_sunny_amps/k400_1.0_sunny_amps[1]) ~ x_vals, col = col2[1], lwd = lw)
+
+## -- 2.0 -- ##
+plot(I(k400_2.0_riveronly_amps/k400_2.0_riveronly_amps[1]) ~ x_vals, ylim =c(0,1.3), type = "l", 
+     col = "dodgerblue", lwd = lw) 
+lines(I(k400_2.0_shady_amps/k400_2.0_shady_amps[1]) ~ x_vals, col = col2[3], lwd = lw)
+lines(I(k400_2.0_sunny_amps/k400_2.0_sunny_amps[1]) ~ x_vals, col = col2[1], lwd = lw)
+legend("topright", c("river-only", "shady", "sunny"), lwd = lw, 
+       col = c("dodgerblue", col2[3], col2[1]) , cex = 1.4, title = "Scenario")
+
+
+## -- 3.0 -- ##
+plot(I(k400_3.0_riveronly_amps/k400_3.0_riveronly_amps[1]) ~ x_vals, ylim =c(0,1.3), type = "l", 
+     col = "dodgerblue", lwd = lw) 
+lines(I(k400_3.0_shady_amps/k400_3.0_shady_amps[1]) ~ x_vals, col = col2[3], lwd = lw)
+lines(I(k400_3.0_sunny_amps/k400_3.0_sunny_amps[1]) ~ x_vals, col = col2[1], lwd = lw)
+
+mtext("Amplitude Ratio", side = 2, 
+      line = 1, outer = T, cex = 1.4)
+mtext("Flow Path Length (m)", side = 1, line = 1, outer = T, cex = 1.4)
+dev.off()
+

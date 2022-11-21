@@ -2,6 +2,8 @@
 ## Compare Thickness and Shade Daily Signal
 ##
 
+library(lubridate)
+
 ####------ READ IN ALL DATA ------####
 box_directory <- "C:/Users/skati/OneDrive - Montana State University/BoxMigratedData/Floodplain_Shade_Box/meacham_updated_results/"
 #"C:/Users/skati/Box/Floodplain_Shade_Box/meacham_updated_results/"
@@ -68,8 +70,8 @@ daily_time_idx <- rep(day_starts_2, each = 6) + rep(hours_idx, times = 6)
 daily_time_idx <- daytimesvector
 plotlwd <- 3
 
-x = k400_0.5_riveronly_100m
-modelrun = thickness[1]
+# x = k400_0.5_riveronly_100m
+# modelrun = thickness[1]
 
 plotacrosstime_daily <- function(x, modelrun) {
   plot(x[x_idx,2,30,1,"X"], 
@@ -101,7 +103,7 @@ par(mfcol = c(4,3),
     oma = c(4,4,4,0),
     mar = c(2,2,2,1),
     cex.main = 2,
-    cex.axis = 1.5)
+    cex.axis = 1.8)
 
 ## RIVER ONLY ##
 mapply(plotacrosstime_daily,
@@ -131,9 +133,9 @@ png("plots/compare_diel_thickness_and_shade_k_400.png",
     res = 72*5)
 par(mfcol = c(4,3),
     oma = c(4,4,4,0),
-    mar = c(2,2,3,1),
+    mar = c(2,2,2,1),
     cex.main = 2,
-    cex.axis = 1.5)
+    cex.axis = 1.8)
 
 ## RIVER ONLY ##
 mapply(plotacrosstime_daily,
@@ -158,6 +160,29 @@ dev.off()
 
 #################
 ###################
+
+#### DIEL LEGEND ####
+par(originalpar)
+png("plots/compare_diel_thickness_and_shade_legend.png",
+    height = 230*5,
+    width = 400*5,
+    res = 72*5)
+plot(rep(5, times = length(time_idx)), 
+     0:(length(time_idx)-1), 
+     bty = "n",
+     col = hcl.colors(24,"Fall", rev = T)[t_idx],
+     pch = 175,
+     cex = 5,
+     xaxt = "n",
+     yaxt = "n",
+     ylab = "",
+     xlab = "")
+text(rep(4.72, times = 6), seq(11.0, 0, by = -2), 
+     c("Jan", "Mar", "May", "Jul", "Sep", "Nov"), 
+     cex = 0.65,
+     adj = 1)
+mtext("Month", side = 3, line = 0)
+dev.off()
 
 
 

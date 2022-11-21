@@ -90,16 +90,16 @@ sunshadeDiffRasters <- mapply(raster,
 
 png("plots/diff_sun_shade_heatmaps_k100_shady.png", 
     width = 800*5,
-    height = 1000*5, res = 72*5)
+    height = 1200*5, res = 72*5)
 par(mfrow = c(4,1),
     mar = c(3,3,1,3),
     cex.axis = 1.5)
 for(i in 1:4){
   plot(sunshadeDiffRasters[[i]],
        asp = 0,
-       col = hcl.colors(17, "Blue-Red 3"),
-       # col = c(hcl.colors(8, "PuBu", rev = F), hcl.colors(8, "Burg", rev = T)),
-       breaks = seq(-8, 8, by = 1),
+       col = hcl.colors(19, "Blue-Red 3")[2:19],
+       # col = c(hcl.colors(8, "Blue-Red 3", rev = F), hcl.colors(8, "Burg", rev = T)),
+       breaks = seq(-8.5, 8.5, by = 1),
        xlim = c(0,2000),
        yaxt = "n")
   abline(h = seq(2.5,24.5, by = 2))
@@ -112,15 +112,15 @@ dev.off()
 
 png("plots/diff_sun_shade_heatmaps_k400_shady.png", 
     width = 800*5,
-    height = 1000*5, res = 72*5)
+    height = 1200*5, res = 72*5)
 par(mfrow = c(4,1),
     mar = c(3,3,1,3),
     cex.axis = 1.5)
 for(i in 5:8){
   plot(sunshadeDiffRasters[[i]],
        asp = 0, 
-       col = hcl.colors(17, "Blue-Red 3"),
-       breaks = seq(-8, 8, by = 1),
+       col = hcl.colors(19, "Blue-Red 3")[2:19],
+       breaks = seq(-8.5, 8.5, by = 1),
        xlim = c(0,2000),
        yaxt = "n")
   abline(h = seq(2.5,24.5, by = 2))
@@ -130,3 +130,44 @@ for(i in 5:8){
        cex = 1.5)
 }
 dev.off()
+
+#### MAKE AN ACCURATE LEGEND ####
+fullrange <- hcl.colors(19, "Blue-Red 3")[2:19]
+
+png("plots/diff_sun_shade_legend.png",
+    height = 500*5,
+    width = 720*5,
+    res = 72*5)
+par(mar= c(1,1,1,1),
+    ljoin = 1,
+    lend = 2)
+plot(rep(5, times = 13), 
+     seq(-3.5, 8.5, by = 1),
+     bty = "n",
+     xaxt = "n",
+     yaxt = "n",
+     type = "n")
+rect(xleft = rep(5, times = 12),
+     ybottom = seq(-3.5, 8.5, by = 1)[1:12],
+     xright = rep(5.25, times = 12),
+     ytop = seq(-3.5, 8.5, by = 1)[2:13],
+     col = fullrange[6:18],
+     border = NA)
+segments(x0 = rep(5.25, times = 13),
+         y0 = seq(-3.5, 8.5, by = 1),
+         x1 = rep(5.35, times = 13),
+         lwd = 2)
+rect(xleft = c(5),
+     ybottom = c(-3.5),
+     xright = 5.25,
+     ytop = 8.5,
+     lwd = 2)
+text(x = rep(5.35, times = 13),
+     y = seq(-3.5, 8.5, by = 1),
+     labels = seq(-3.5, 8.5, by = 1),
+     pos = 4,
+     cex = 1.8)
+dev.off()
+
+
+
