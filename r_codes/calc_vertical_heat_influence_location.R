@@ -176,6 +176,8 @@ shady_vd_400
 sunny_vd_100
 sunny_vd_400
 
+
+
 #### FILL IN SHADY 400 ####
 which_thickness <- floor(which(is.na(shady_vd_400))/24)
 which_days <- (which(is.na(shady_vd_400))/24 - which_thickness)*24
@@ -328,5 +330,19 @@ saveRDS(shady_vd_400, "analysis_data/shady_vd_400.RData")
 saveRDS(sunny_vd_100, "analysis_data/sunny_vd_100.RData")
 saveRDS(sunny_vd_400, "analysis_data/sunny_vd_400.RData")
 
+#### MIN, MAX ####
+## Shady 100 ##
+round(apply(shady_vd_100, 2, min))
+round(apply(shady_vd_100, 2, max))
 
+## Shady 400 ##
+round(apply(shady_vd_400, 2, min))
+round(apply(shady_vd_400, 2, max))
 
+## Sunny 100 ##
+round(apply(sunny_vd_100, 2, min))
+round(apply(sunny_vd_100, 2, max))
+
+## Sunny 400 ##
+round(apply(sunny_vd_400, 2, min))
+round(apply(sunny_vd_400, 2, max))
